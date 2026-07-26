@@ -16,7 +16,7 @@ class WorkoutReminder(commands.Cog):
     def cog_unload(self):
         self.check_reminders.cancel()
 
-    @nextcord.slash_command(name="remind_workout", description="Set your daily workout time and enable Discord reminders.")
+    @nextcord.slash_command(name="remindworkout", description="Set your daily workout time and enable Discord reminders.")
     async def remind_workout(
         self, 
         interaction: nextcord.Interaction, 
