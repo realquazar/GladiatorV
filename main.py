@@ -9,30 +9,39 @@ intents = nextcord.Intents.default()
 intents.members = True  
 intents.message_content = True 
 
-activity = nextcord.Game(name="YOLO /startworkout")
+activity = nextcord.Game(name="❄️ Winter is coming... /startworkout")
 
 bot = commands.Bot(
     intents=intents, 
     activity=activity
 )
 
-COGS_DIR = "cogs"
+ALLOWED_COGS = [
+    "cogs.workout_cog",
+    "cogs.flex_cog",
+    "cogs.reminder_cog",
+    "cogs.hype_cog",
+    "cogs.diet_cog",
+    "cogs.custom_workout_cog"
+]
 
 if __name__ == "__main__":
-    for filename in os.listdir(f"./{COGS_DIR}"):
-        if filename.endswith(".py"):
-            try:
-                bot.load_extension(f"{COGS_DIR}.{filename[:-3]}")
-                print(f"✅ Loaded: {filename}")
-            except Exception as e:
-                print(f"❌ Failed to load {filename}: {e}")
+    for cog in ALLOWED_COGS:
+        try:
+            bot.load_extension(cog)
+            print(f"✅ Loaded: {cog}")
+        except Exception as e:
+            print(f"❌ Failed to load {cog}: {e}")
 
 @bot.event
 async def on_ready():
     print("---")
-    print(f"🛡️ Radon 2.0 is Online")
+    print(f"🛡️ Gladiator V is Online")
     print(f"Logged in as: {bot.user.name}")
     print(f"Status: Playing {bot.activity.name}")
+    
+    await bot.sync_all_application_commands()
+    print("⚔️ Application command tree synced and cleaned!")
     print("---")
 
 bot.run(os.getenv("DISCORD_TOKEN"))
