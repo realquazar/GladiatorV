@@ -1,0 +1,57 @@
+import nextcord
+from nextcord.ext import commands
+
+class HelpCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @nextcord.slash_command(name="help", description="Learn how Gladiator V works and view all commands.")
+    async def help_command(self, interaction: nextcord.Interaction):
+        embed = nextcord.Embed(
+            title="⚔️ GLADIATOR V",
+            description=(
+                "Want to begin working out but can't figure out where to begin?\n"
+                "**Gladiator V has got you covered.**\n\n"
+                "🚀 **How to start**\n"
+                "Follow the steps below to set up your routine, lock in your schedule, and track your progress.\n\n"
+                "───\n\n"
+                "📜 **COMMANDS**\n\n"
+                "• **`/schedule`** — Set up or customize your personal workout schedule and routine.\n\n"
+                "• **`/startworkout`** — Begin your active workout session for the day and follow guided exercises.\n\n"
+                "• **`/remind_workout`** — Set custom reminders so you never miss a scheduled training session.\n\n"
+                "• **`/myworkout`** — View your workout history, current streak, and personal progression stats.\n\n"
+                "• **`/flex`** — Flex your achievements, new PRs, and workout streaks directly in the server.\n\n"
+                "• **`/diet`** — Log and track your daily nutrition, calories, and macros to stay on target.\n\n"
+                "• **`/hype`** — Get a quick boost of motivation to get off your phone and onto the iron.\n\n"
+                "───\n\n"
+                "⚙️ **PROGRESSIVE DIFFICULTY**\n"
+                "workouts and exercises dynamically scale—the more you complete them and progress, the harder they get to keep challenging your limits!\n\n"
+                "💪 **Grow Stronger. Keep pushing forward.** 🛡️"
+            ),
+            color=nextcord.Color.dark_gray()
+        )
+
+        # Interactive Link Buttons for Top.gg & Support
+        view = nextcord.ui.View()
+        
+        topgg_button = nextcord.ui.Button(
+            label="Vote on Top.gg",
+            url="https://top.gg/bot/1016363661444534452",
+            style=nextcord.ButtonStyle.link,
+            emoji="⭐"
+        )
+        
+        support_button = nextcord.ui.Button(
+            label="Support Server",
+            url="https://discord.gg/KBtTsr9ub",
+            style=nextcord.ButtonStyle.link,
+            emoji="💬"
+        )
+
+        view.add_item(topgg_button)
+        view.add_item(support_button)
+
+        await interaction.response.send_message(embed=embed, view=view)
+
+def setup(bot):
+    bot.add_cog(HelpCog(bot))

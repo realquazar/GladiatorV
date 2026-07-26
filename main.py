@@ -22,7 +22,8 @@ ALLOWED_COGS = [
     "cogs.reminder_cog",
     "cogs.hype_cog",
     "cogs.diet_cog",
-    "cogs.custom_workout_cog"
+    "cogs.custom_workout_cog",
+    "cogs.help_cog"
 ]
 
 if __name__ == "__main__":
