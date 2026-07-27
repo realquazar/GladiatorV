@@ -1,6 +1,8 @@
 # 🛡️ Radon 2.0
 
-Radon is a multipurpose discord bot specifically designed to help you in your fitness goals!
+Gladiator V is your personalized work out bot, grow stronger by following its free schedules, flex your PR's in discord servers and get a list of some
+rich sources of protein. Throughout your journey Gladiator will be there to strengthen you day by day reminding you to work out. Work out sessions
+get harder as you progress so good luck.
 
 ---
 
