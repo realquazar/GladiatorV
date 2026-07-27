@@ -126,13 +126,22 @@ class WorkoutView(View):
         clear_btn.callback = self.clear_all_data
         self.add_item(clear_btn)
 
+    def get_file(self):
+        if os.path.exists("assets/armor.jpg"):
+            return nextcord.File("assets/armor.jpg", filename="armor.jpg")
+        return None
+
     async def refresh_data(self, interaction):
         user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
         self.schedules = user_data.get("schedules", []) if user_data else []
         self.setup_selectors()
         
-        file = nextcord.File("assets/armor.jpg", filename="armor.jpg")
-        await interaction.response.edit_message(embed=self.create_embed(), view=self, file=file)
+        kwargs = {"embed": self.create_embed(), "view": self}
+        file = self.get_file()
+        if file:
+            kwargs["file"] = file
+            
+        await interaction.response.edit_message(**kwargs)
 
     async def change_schedule(self, interaction: nextcord.Interaction):
         if interaction.data['values'][0] == "none": return
@@ -155,20 +164,20 @@ class WorkoutView(View):
         self.current_sched_idx = 0
         self.setup_selectors()
         
-        file = nextcord.File("assets/armor.jpg", filename="armor.jpg")
-        await interaction.response.edit_message(
-            content="🧹 **All workout schedules have been cleared.**",
-            embed=self.create_embed(), 
-            view=self, 
-            file=file
-        )
+        kwargs = {"content": "🧹 **All workout schedules have been cleared.**", "embed": self.create_embed(), "view": self}
+        file = self.get_file()
+        if file:
+            kwargs["file"] = file
+            
+        await interaction.response.edit_message(**kwargs)
 
     def create_embed(self):
         embed = nextcord.Embed(
             title=f"🛡️ {self.user_name}'s Private Armory", 
             color=0x3498db
         )
-        embed.set_thumbnail(url="attachment://armor.jpg")
+        if os.path.exists("assets/armor.jpg"):
+            embed.set_thumbnail(url="attachment://armor.jpg")
         
         if not self.schedules:
             embed.description = "❌ **No schedules found.**\n\nClick the **New Schedule** button below to create your first plan."
@@ -196,18 +205,24 @@ class CustomWorkoutCog(commands.Cog):
 
     @nextcord.slash_command(name="myworkout", description="Create your custom workout plans")
     async def myworkout(self, interaction: nextcord.Interaction):
+        # Acknowledge immediately to prevent 10062 Unknown Interaction errors during database queries
+        await interaction.response.defer(ephemeral=True)
+
         user_data = await self.collection.find_one({"_id": interaction.user.id})
         schedules = user_data.get("schedules", []) if user_data else []
         
-        file = nextcord.File("assets/armor.jpg", filename="armor.jpg")
         view = WorkoutView(interaction.user.display_name, schedules, self)
         
-        await interaction.response.send_message(
-            embed=view.create_embed(), 
-            view=view, 
-            file=file, 
-            ephemeral=True
-        )
+        kwargs = {
+            "embed": view.create_embed(), 
+            "view": view
+        }
+        
+        file = view.get_file()
+        if file:
+            kwargs["file"] = file
+            
+        await interaction.followup.send(**kwargs)
 
 def setup(bot):
     bot.add_cog(CustomWorkoutCog(bot))
