@@ -65,7 +65,6 @@ class SchedulePaginationView(nextcord.ui.View):
         """Extracts exercises based on rank structure"""
         if isinstance(self.routine_data, dict):
             return self.routine_data.get(day)
-        
         return self.routine_data
 
     def create_embed(self):
@@ -86,7 +85,6 @@ class SchedulePaginationView(nextcord.ui.View):
         
         elif self.page == 1:
             embed.title = "🏋️‍♀️ Monday & Tuesday: Arms + Chest"
-            
             exercises = self.get_routine_for_day("Monday")
             if isinstance(exercises, list):
                 for ex, sets in exercises:
@@ -153,6 +151,10 @@ class WorkoutCog(commands.Cog):
     
     @nextcord.slash_command(name="schedule", description="View the weekly training split details")
     async def schedule(self, interaction: nextcord.Interaction):
+        # 1. Defer immediately to extend the 3-second Discord window to 15 minutes
+        await interaction.response.defer(ephemeral=True)
+        
+        # 2. Perform DB operation
         stage, _ = await self.get_user_stage(interaction.user.id)
         
         view = nextcord.ui.View()
@@ -171,11 +173,17 @@ class WorkoutCog(commands.Cog):
 
         select.callback = select_callback
         view.add_item(select)
-        await interaction.response.send_message("Select a training path to see your specific routine:", view=view, ephemeral=True)
+        
+        # 3. Use followup.send instead of response.send_message after deferring
+        await interaction.followup.send("Select a training path to see your specific routine:", view=view, ephemeral=True)
 
 
     @nextcord.slash_command(name="startworkout", description="Access your level-based training routine")
     async def startworkout(self, interaction: nextcord.Interaction):
+        # 1. Defer immediately
+        await interaction.response.defer(ephemeral=True)
+
+        # 2. Perform DB operation
         stage, count = await self.get_user_stage(interaction.user.id)
         day_name = datetime.now().strftime("%A")
         
@@ -234,7 +242,9 @@ class WorkoutCog(commands.Cog):
 
         select.callback = select_callback
         view.add_item(select)
-        await interaction.response.send_message("Choose your focus for today:", view=view, ephemeral=True)
+        
+        # 3. Use followup.send
+        await interaction.followup.send("Choose your focus for today:", view=view, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(WorkoutCog(bot))
