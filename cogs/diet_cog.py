@@ -73,21 +73,13 @@ class DietView(View):
     async def back(self, button, interaction):
         if self.page > 0:
             self.page -= 1
-            file = get_food_file()
-            kwargs = {"embed": self.create_embed(), "view": self}
-            if file:
-                kwargs["file"] = file
-            await interaction.response.edit_message(**kwargs)
+            await interaction.response.edit_message(embed=self.create_embed(), view=self)
 
     @nextcord.ui.button(label="Next", style=nextcord.ButtonStyle.gray)
     async def next(self, button, interaction):
         if self.page < self.max_pages:
             self.page += 1
-            file = get_food_file()
-            kwargs = {"embed": self.create_embed(), "view": self}
-            if file:
-                kwargs["file"] = file
-            await interaction.response.edit_message(**kwargs)
+            await interaction.response.edit_message(embed=self.create_embed(), view=self)
 
 class DietDropdown(Select):
     def __init__(self):
@@ -104,12 +96,8 @@ class DietDropdown(Select):
         else:
             sorted_data = sorted(FOOD_DATA, key=lambda x: x["calories"])
         
-        file = get_food_file()
         view = DietView(sorted_data, sort_type)
-        kwargs = {"embed": view.create_embed(), "view": view}
-        if file:
-            kwargs["file"] = file
-        await interaction.response.edit_message(**kwargs)
+        await interaction.response.edit_message(embed=view.create_embed(), view=view)
 
 class DietCog(commands.Cog):
     def __init__(self, bot):
@@ -120,8 +108,8 @@ class DietCog(commands.Cog):
         if not interaction.response.is_done():
             try:
                 await interaction.response.defer(ephemeral=True)
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"Defer error in /diet: {e}")
 
         view = View()
         view.add_item(DietDropdown())
@@ -140,10 +128,7 @@ class DietCog(commands.Cog):
         if file:
             kwargs["file"] = file
 
-        if interaction.response.is_done():
-            await interaction.followup.send(**kwargs)
-        else:
-            await interaction.response.send_message(**kwargs)
+        await interaction.followup.send(**kwargs)
 
 def setup(bot):
     bot.add_cog(DietCog(bot))

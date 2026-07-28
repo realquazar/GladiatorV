@@ -10,7 +10,7 @@ class HypeCog(commands.Cog):
         playlist_url = "https://music.youtube.com/playlist?list=PLiOIgEQJFWM75NepWUZEVG8U2fKhqRoOf"
         
         embed = nextcord.Embed(
-            title="🔥 Radon Hype Mix",
+            title="🔥 Gladiator V Hype Mix",
             description="Fuel your workout with the official training playlist.",
             color=0xFF0000
         )
