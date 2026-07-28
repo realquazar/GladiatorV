@@ -95,6 +95,7 @@ class WorkoutView(View):
                 ))
         
         sched_select = Select(
+            custom_id="workout_schedule_select",
             placeholder="Select a Workout Schedule...", 
             options=sched_options, 
             disabled=not has_schedules,
@@ -107,6 +108,7 @@ class WorkoutView(View):
         day_options = [nextcord.SelectOption(label=d, value=d, default=(d == self.current_day)) for d in days]
         
         day_select = Select(
+            custom_id="workout_day_select",
             placeholder="Choose Day of the Week...", 
             options=day_options, 
             disabled=not has_schedules,
@@ -115,7 +117,7 @@ class WorkoutView(View):
         day_select.callback = self.change_day
         self.add_item(day_select)
         
-        add_sched_btn = Button(label="New Schedule", style=nextcord.ButtonStyle.blurple, row=2)
+        add_sched_btn = Button(label="New Schedule", style=nextcord.ButtonStyle.blurple, row=2, custom_id="new_schedule_btn")
         add_sched_btn.callback = self.add_schedule_modal
         self.add_item(add_sched_btn)
         
@@ -123,7 +125,8 @@ class WorkoutView(View):
             label="Add Exercise", 
             style=nextcord.ButtonStyle.success, 
             row=2, 
-            disabled=not has_schedules
+            disabled=not has_schedules,
+            custom_id="add_exercise_btn"
         )
         add_ex_btn.callback = self.add_exercise_modal
         self.add_item(add_ex_btn)
@@ -132,7 +135,8 @@ class WorkoutView(View):
             label="Clear All", 
             style=nextcord.ButtonStyle.danger, 
             row=2,
-            disabled=not has_schedules
+            disabled=not has_schedules,
+            custom_id="clear_all_btn"
         )
         clear_btn.callback = self.clear_all_data
         self.add_item(clear_btn)
@@ -238,7 +242,6 @@ class CustomWorkoutCog(commands.Cog):
 
     @nextcord.slash_command(name="myworkout", description="Create your custom workout plans")
     async def myworkout(self, interaction: nextcord.Interaction):
-        # Acknowledge immediately if not already acknowledged
         if not interaction.response.is_done():
             try:
                 await interaction.response.defer(ephemeral=True)
