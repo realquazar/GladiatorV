@@ -69,13 +69,13 @@ class DietView(View):
         embed.description = description
         return embed
 
-    @nextcord.ui.button(label="Back", style=nextcord.ButtonStyle.gray)
+    @nextcord.ui.button(label="Back", style=nextcord.ButtonStyle.gray, custom_id="diet_back_btn")
     async def back(self, button, interaction):
         if self.page > 0:
             self.page -= 1
             await interaction.response.edit_message(embed=self.create_embed(), view=self)
 
-    @nextcord.ui.button(label="Next", style=nextcord.ButtonStyle.gray)
+    @nextcord.ui.button(label="Next", style=nextcord.ButtonStyle.gray, custom_id="diet_next_btn")
     async def next(self, button, interaction):
         if self.page < self.max_pages:
             self.page += 1
@@ -87,7 +87,7 @@ class DietDropdown(Select):
             nextcord.SelectOption(label="Sort by Protein", emoji="🥩", value="protein"),
             nextcord.SelectOption(label="Sort by Calories", emoji="🥗", value="calories"),
         ]
-        super().__init__(placeholder="How do you want to sort?", options=options)
+        super().__init__(placeholder="How do you want to sort?", options=options, custom_id="diet_sort_dropdown")
 
     async def callback(self, interaction: nextcord.Interaction):
         sort_type = self.values[0]
