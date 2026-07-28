@@ -200,13 +200,20 @@ class WorkoutView(View):
 class CustomWorkoutCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
+        if hasattr(bot, "mongo_client") and bot.mongo_client is not None:
+            self.cluster = bot.mongo_client
+        else:
+            self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000)
         self.collection = self.cluster["GymBotDB"]["custom_workouts_v2"]
 
     @nextcord.slash_command(name="myworkout", description="Create your custom workout plans")
     async def myworkout(self, interaction: nextcord.Interaction):
-        # Acknowledge immediately to prevent 10062 Unknown Interaction errors during database queries
-        await interaction.response.defer(ephemeral=True)
+        # Acknowledge immediately if not already acknowledged
+        if not interaction.response.is_done():
+            try:
+                await interaction.response.defer(ephemeral=True)
+            except Exception:
+                pass
 
         user_data = await self.collection.find_one({"_id": interaction.user.id})
         schedules = user_data.get("schedules", []) if user_data else []

@@ -112,7 +112,10 @@ class DietCog(commands.Cog):
         file = nextcord.File("assets/food.png", filename="food.png")
         embed.set_thumbnail(url="attachment://food.png")
         
-        await interaction.response.send_message(embed=embed, view=view, file=file, ephemeral=True)
+        if interaction.response.is_done():
+            await interaction.followup.send(embed=embed, view=view, file=file, ephemeral=True)
+        else:
+            await interaction.response.send_message(embed=embed, view=view, file=file, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(DietCog(bot))

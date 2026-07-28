@@ -23,7 +23,10 @@ class HypeCog(commands.Cog):
         
         embed.set_footer(text="No excuses. Let's get to work.")
                 
-        await interaction.response.send_message(embed=embed)
+        if interaction.response.is_done():
+            await interaction.followup.send(embed=embed)
+        else:
+            await interaction.response.send_message(embed=embed)
 
 def setup(bot):
     bot.add_cog(HypeCog(bot))

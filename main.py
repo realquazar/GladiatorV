@@ -1,7 +1,16 @@
 import nextcord
 from nextcord.ext import commands
 import os
+import sys
+import motor.motor_asyncio
 from dotenv import load_dotenv
+
+# Ensure stdout supports UTF-8 on Windows consoles
+if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 load_dotenv()
 
@@ -15,6 +24,14 @@ bot = commands.Bot(
     intents=intents, 
     activity=activity
 )
+
+# Single shared MongoDB client connection pool
+mongo_uri = os.getenv("MONGO_URI")
+if mongo_uri:
+    bot.mongo_client = motor.motor_asyncio.AsyncIOMotorClient(mongo_uri, serverSelectionTimeoutMS=5000)
+else:
+    bot.mongo_client = None
+    print("⚠️ MONGO_URI environment variable not found!")
 
 ALLOWED_COGS = [
     "cogs.workout_cog",
@@ -40,9 +57,6 @@ async def on_ready():
     print(f"🛡️ Gladiator V is Online")
     print(f"Logged in as: {bot.user.name}")
     print(f"Status: Playing {bot.activity.name}")
-    
-    await bot.sync_all_application_commands()
-    print("⚔️ Application command tree synced and cleaned!")
     print("---")
 
 bot.run(os.getenv("DISCORD_TOKEN"))

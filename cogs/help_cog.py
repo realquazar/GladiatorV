@@ -51,7 +51,10 @@ class HelpCog(commands.Cog):
         view.add_item(topgg_button)
         view.add_item(support_button)
 
-        await interaction.response.send_message(embed=embed, view=view)
+        if interaction.response.is_done():
+            await interaction.followup.send(embed=embed, view=view)
+        else:
+            await interaction.response.send_message(embed=embed, view=view)
 
 def setup(bot):
     bot.add_cog(HelpCog(bot))

@@ -3,11 +3,50 @@ from nextcord.ext import commands, tasks
 import datetime
 import motor.motor_asyncio
 import os
+import re
+
+TIMEZONE_OFFSETS = {
+    "IST": datetime.timedelta(hours=5, minutes=30),
+    "UTC": datetime.timedelta(hours=0),
+    "EST": datetime.timedelta(hours=-5),
+    "CST": datetime.timedelta(hours=-6),
+    "MST": datetime.timedelta(hours=-7),
+    "PST": datetime.timedelta(hours=-8),
+    "BST": datetime.timedelta(hours=1),
+    "AEST": datetime.timedelta(hours=10)
+}
+
+def parse_time_input(time_str: str):
+    """
+    Parses flexible human time inputs like '3:11 PM', '3:11PM', '03:11 PM', '3:11 pm', '15:11', '3:11 AM', '6:00 AM to 7:00 AM'
+    Returns datetime.time object or None if invalid.
+    """
+    clean = time_str.split("to")[0].strip()
+    match = re.search(r"(\d{1,2}):(\d{2})\s*([ap]\.?m\.?)?", clean, re.IGNORECASE)
+    if not match:
+        return None
+    
+    hr, mn, period = int(match.group(1)), int(match.group(2)), match.group(3)
+    if hr < 0 or hr > 23 or mn < 0 or mn > 59:
+        return None
+
+    if period:
+        p = period.replace(".", "").upper()
+        if p == "PM" and hr < 12:
+            hr += 12
+        elif p == "AM" and hr == 12:
+            hr = 0
+
+    return datetime.time(hr, mn)
+
 
 class WorkoutReminder(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
+        if hasattr(bot, "mongo_client") and bot.mongo_client is not None:
+            self.client = bot.mongo_client
+        else:
+            self.client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000)
         self.db = self.client["gladiator_db"]
         self.reminders = self.db["workout_reminders"]
         
@@ -20,64 +59,84 @@ class WorkoutReminder(commands.Cog):
     async def remind_workout(
         self, 
         interaction: nextcord.Interaction, 
-        time_range: str = nextcord.SlashOption(description="e.g., 6:00 AM to 7:00 AM or 06:00 AM"),
+        time_range: str = nextcord.SlashOption(description="e.g., 3:11 PM or 6:00 AM to 7:00 AM"),
+        timezone_choice: str = nextcord.SlashOption(
+            name="timezone",
+            description="Your local timezone (default is IST UTC+5:30)",
+            required=False,
+            choices={
+                "IST (UTC+5:30)": "IST",
+                "UTC (UTC+0)": "UTC",
+                "EST (UTC-5)": "EST",
+                "CST (UTC-6)": "CST",
+                "MST (UTC-7)": "MST",
+                "PST (UTC-8)": "PST",
+                "GMT / BST (UTC+1)": "BST",
+                "AEST (UTC+10)": "AEST"
+            },
+            default="IST"
+        ),
         channel: nextcord.TextChannel = nextcord.SlashOption(description="Channel to receive the reminder ping", required=False)
     ):
         await interaction.response.defer(ephemeral=True)
 
-        existing_reminder = await self.reminders.find_one({"user_id": interaction.user.id})
+        try:
+            existing_reminder = await self.reminders.find_one({"user_id": interaction.user.id})
+        except Exception as db_err:
+            print(f"MongoDB error: {db_err}")
+            await interaction.followup.send("⚠️ Database error occurred. Please try again.", ephemeral=True)
+            return
         
         if existing_reminder:
             existing_time = existing_reminder.get("time_range_text", "Unknown Time")
             
-            view = ManageExistingReminderView(self, interaction.user.id, time_range, channel)
+            view = ManageExistingReminderView(self, interaction.user.id, time_range, timezone_choice, channel)
             await interaction.followup.send(
-                f"❌ **You can't set a time because it is already set at `{existing_time}`!**\n\n"
-                f"Would you like to **Update** your current schedule to `{time_range}` or **Delete** your existing reminder entirely?",
+                f"❌ **You can't set a new time directly because it is already set at `{existing_time}`!**\n\n"
+                f"Would you like to **Update** your current schedule to `{time_range}` (`{timezone_choice}`) or **Delete** your existing reminder entirely?",
                 view=view,
                 ephemeral=True
             )
             return
 
-        await self._process_reminder_setup(interaction, time_range, channel)
+        await self._process_reminder_setup(interaction, time_range, timezone_choice, channel)
 
-    async def _process_reminder_setup(self, interaction: nextcord.Interaction, time_range: str, channel: nextcord.TextChannel = None, is_update: bool = False):
+    async def _process_reminder_setup(
+        self, 
+        interaction: nextcord.Interaction, 
+        time_range: str, 
+        timezone_str: str = "IST",
+        channel: nextcord.TextChannel = None, 
+        is_update: bool = False
+    ):
         target_channel = channel or interaction.channel
 
-        try:
-            start_time_str = time_range.split("to")[0].strip()
-            parsed_time = datetime.datetime.strptime(start_time_str, "%I:%M %p").time()
-        except ValueError:
+        parsed_time = parse_time_input(time_range)
+        if not parsed_time:
             await interaction.followup.send(
-                "⚠️ **Invalid time format!** Please use format like `6:00 AM to 7:00 AM` or `06:30 PM`.", 
+                "⚠️ **Invalid time format!** Please use formats like `3:11 PM`, `15:11`, or `6:00 AM to 7:00 AM`.", 
                 ephemeral=True
             )
             return
 
-        view = ConfirmReminderView()
-        await interaction.followup.send(
-            f"⚔️ **Workout Reminder Agreement**\n\n"
-            f"• **Scheduled Time:** `{time_range}`\n"
-            f"• **Reminder Channel:** {target_channel.mention}\n"
-            f"• **Notice:** You will be pinged **5 minutes before** your start time.\n\n"
-            f"Do you agree to receive workout reminder pings in this server?",
-            view=view,
-            ephemeral=True
-        )
+        # Calculate exact ping time (Workout Time minus 5 minutes) in user's local timezone
+        workout_dt_naive = datetime.datetime.combine(datetime.date.today(), parsed_time)
+        ping_dt_naive = workout_dt_naive - datetime.timedelta(minutes=5)
 
-        await view.wait()
-
-        if view.value is None:
-            await interaction.followup.send("⏰ Timed out. Operation cancelled.", ephemeral=True)
-            return
-        elif not view.value:
-            await interaction.followup.send("❌ Setup cancelled. No changes were made.", ephemeral=True)
-            return
+        tz_offset = TIMEZONE_OFFSETS.get(timezone_str, TIMEZONE_OFFSETS["IST"])
+        tz_info = datetime.timezone(tz_offset)
+        local_ping_dt = ping_dt_naive.replace(tzinfo=tz_info)
+        utc_ping_dt = local_ping_dt.astimezone(datetime.timezone.utc)
 
         reminder_data = {
             "user_id": interaction.user.id,
             "guild_id": interaction.guild_id,
             "channel_id": target_channel.id,
+            "timezone": timezone_str,
+            "utc_ping_hour": utc_ping_dt.hour,
+            "utc_ping_minute": utc_ping_dt.minute,
+            "ping_hour": ping_dt_naive.hour,
+            "ping_minute": ping_dt_naive.minute,
             "start_hour": parsed_time.hour,
             "start_minute": parsed_time.minute,
             "time_range_text": time_range,
@@ -91,40 +150,64 @@ class WorkoutReminder(commands.Cog):
         )
 
         status_msg = "Updated!" if is_update else "Set!"
+        start_time_formatted = parsed_time.strftime("%I:%M %p").lstrip("0")
         await interaction.followup.send(
-            f"✅ **Reminder {status_msg}** I will ping you in {target_channel.mention} 5 minutes before `{start_time_str}` every day. Get ready to train! 🥊",
+            f"✅ **Reminder {status_msg}** I will ping you in {target_channel.mention} 5 minutes before `{start_time_formatted}` ({timezone_str}) every day. Get ready to train! 🥊",
             ephemeral=True
         )
 
     @tasks.loop(minutes=1)
     async def check_reminders(self):
-        now = datetime.datetime.now()
-        target_dt = now + datetime.timedelta(minutes=5)
-        
-        target_hour = target_dt.hour
-        target_minute = target_dt.minute
+        now_utc = datetime.datetime.now(datetime.timezone.utc)
+        utc_hour = now_utc.hour
+        utc_minute = now_utc.minute
 
+        # Query UTC-based reminders first
         cursor = self.reminders.find({
             "enabled": True,
-            "start_hour": target_hour,
-            "start_minute": target_minute
+            "utc_ping_hour": utc_hour,
+            "utc_ping_minute": utc_minute
         })
 
         async for doc in cursor:
-            channel = self.bot.get_channel(doc["channel_id"])
-            if channel:
-                user_id = doc["user_id"]
-                time_str = doc["time_range_text"]
-                
-                view = ReminderPingView(self.reminders, user_id)
-                try:
-                    await channel.send(
-                        f"🚨 <@{user_id}> **WORKOUT REMINDER!** 🚨\n"
-                        f"Your workout slot (`{time_str}`) starts in **5 minutes**! Time to suit up and gear up! ⚔️",
-                        view=view
-                    )
-                except Exception as e:
-                    print(f"Failed to send reminder to user {user_id}: {e}")
+            await self._send_reminder_ping(doc)
+
+        # Fallback for legacy documents without utc_ping_hour
+        now_local = datetime.datetime.now()
+        legacy_cursor = self.reminders.find({
+            "enabled": True,
+            "utc_ping_hour": {"$exists": False},
+            "$or": [
+                {"ping_hour": now_local.hour, "ping_minute": now_local.minute},
+                {"start_hour": now_local.hour, "start_minute": now_local.minute}
+            ]
+        })
+
+        async for doc in legacy_cursor:
+            await self._send_reminder_ping(doc)
+
+    async def _send_reminder_ping(self, doc):
+        channel = self.bot.get_channel(doc["channel_id"])
+        if not channel:
+            try:
+                channel = await self.bot.fetch_channel(doc["channel_id"])
+            except Exception:
+                channel = None
+
+        if channel:
+            user_id = doc["user_id"]
+            time_str = doc["time_range_text"]
+            tz_str = doc.get("timezone", "IST")
+            
+            view = ReminderPingView(self.reminders, user_id)
+            try:
+                await channel.send(
+                    f"🚨 <@{user_id}> **WORKOUT REMINDER!** 🚨\n"
+                    f"Your workout slot (`{time_str}` {tz_str}) starts in **5 minutes**! Time to suit up and gear up! ⚔️",
+                    view=view
+                )
+            except Exception as e:
+                print(f"Failed to send reminder to user {user_id}: {e}")
 
     @check_reminders.before_loop
     async def before_check(self):
@@ -132,11 +215,12 @@ class WorkoutReminder(commands.Cog):
 
 
 class ManageExistingReminderView(nextcord.ui.View):
-    def __init__(self, cog, user_id, new_time_range, new_channel):
+    def __init__(self, cog, user_id, new_time_range, new_timezone, new_channel):
         super().__init__(timeout=60)
         self.cog = cog
         self.user_id = user_id
         self.new_time_range = new_time_range
+        self.new_timezone = new_timezone
         self.new_channel = new_channel
 
     @nextcord.ui.button(label="Update Time", style=nextcord.ButtonStyle.primary)
@@ -145,7 +229,7 @@ class ManageExistingReminderView(nextcord.ui.View):
             return await interaction.response.send_message("This menu isn't for you!", ephemeral=True)
         
         await interaction.response.defer(ephemeral=True)
-        await self.cog._process_reminder_setup(interaction, self.new_time_range, self.new_channel, is_update=True)
+        await self.cog._process_reminder_setup(interaction, self.new_time_range, self.new_timezone, self.new_channel, is_update=True)
 
     @nextcord.ui.button(label="Delete Reminder", style=nextcord.ButtonStyle.danger)
     async def delete_reminder(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -155,22 +239,6 @@ class ManageExistingReminderView(nextcord.ui.View):
         await interaction.response.defer(ephemeral=True)
         await self.cog.reminders.delete_one({"user_id": self.user_id})
         await interaction.followup.send("🗑️ **Your workout reminder has been deleted successfully.**", ephemeral=True)
-
-
-class ConfirmReminderView(nextcord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=60)
-        self.value = None
-
-    @nextcord.ui.button(label="I Agree (Enable Reminders)", style=nextcord.ButtonStyle.green)
-    async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        self.value = True
-        self.stop()
-
-    @nextcord.ui.button(label="Cancel / Opt Out", style=nextcord.ButtonStyle.red)
-    async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        self.value = False
-        self.stop()
 
 
 class ReminderPingView(nextcord.ui.View):
@@ -194,7 +262,7 @@ class ReminderPingView(nextcord.ui.View):
             return await interaction.response.send_message("This button is for the scheduled user.", ephemeral=True)
 
         await interaction.response.send_message(
-            "⚙️ To change your workout slot, simply run the `/remind_workout` command again with your new time! You will be given the option to overwrite your existing time.",
+            "⚙️ To change your workout slot, simply run the `/remindworkout` command again with your new time! You will be given the option to overwrite your existing time.",
             ephemeral=True
         )
 

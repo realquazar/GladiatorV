@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands
-from nextcord.ui import Select, View, Button
 import motor.motor_asyncio
 import os
 from datetime import datetime
@@ -62,7 +61,6 @@ class SchedulePaginationView(nextcord.ui.View):
         self.page = 0
         
     def get_routine_for_day(self, day):
-        """Extracts exercises based on rank structure"""
         if isinstance(self.routine_data, dict):
             return self.routine_data.get(day)
         return self.routine_data
@@ -82,7 +80,6 @@ class SchedulePaginationView(nextcord.ui.View):
                 "**Saturday:** Leg Day\n"
                 "**Sunday:** *Rest & Recovery*"
             )
-        
         elif self.page == 1:
             embed.title = "🏋️‍♀️ Monday & Tuesday: Arms + Chest"
             exercises = self.get_routine_for_day("Monday")
@@ -91,11 +88,9 @@ class SchedulePaginationView(nextcord.ui.View):
                     embed.add_field(name=f"🧩 {ex}", value=f"└ {sets}", inline=False)
             else:
                 embed.description = "🛋️ Rest Day"
-
         elif self.page == 2: 
             embed.title = "🛋️ Wednesday: Rest"
             embed.description = "Recovery is where the muscle grows. Take it easy today!"
-
         elif self.page == 3:
             embed.title = "💪 Thursday & Friday: Abs"
             exercises = self.get_routine_for_day("Thursday")
@@ -104,7 +99,6 @@ class SchedulePaginationView(nextcord.ui.View):
                     embed.add_field(name=f"🧩 {ex}", value=f"└ {sets}", inline=False)
             else:
                 embed.description = "🛋️ Rest Day"
-
         elif self.page == 4:
             embed.title = "🍗 Saturday: Leg Day"
             exercises = self.get_routine_for_day("Saturday")
@@ -113,34 +107,130 @@ class SchedulePaginationView(nextcord.ui.View):
                     embed.add_field(name=f"🧩 {ex}", value=f"└ {sets}", inline=False)
             else:
                 embed.description = "🛋️ Rest Day"
-
         elif self.page == 5:
             embed.title = "🛋️ Sunday: Rest"
             embed.description = "Prepare your mind and body for the week ahead."
 
         return embed
 
-    @nextcord.ui.button(label="⬅️", style=nextcord.ButtonStyle.blurple)
-    async def back(self, button, interaction):
+    @nextcord.ui.button(label="⬅️", style=nextcord.ButtonStyle.blurple, custom_id="sched_back_btn")
+    async def back(self, button, interaction: nextcord.Interaction):
         self.page = max(0, self.page - 1)
         await interaction.response.edit_message(embed=self.create_embed(), view=self)
 
-    @nextcord.ui.button(label="➡️", style=nextcord.ButtonStyle.blurple)
-    async def forward(self, button, interaction):
+    @nextcord.ui.button(label="➡️", style=nextcord.ButtonStyle.blurple, custom_id="sched_forward_btn")
+    async def forward(self, button, interaction: nextcord.Interaction):
         self.page = min(5, self.page + 1)
         await interaction.response.edit_message(embed=self.create_embed(), view=self)
+
+
+class WorkoutFinishView(nextcord.ui.View):
+    def __init__(self, stage, count):
+        super().__init__(timeout=120)
+        self.stage = stage
+        self.count = count
+
+    @nextcord.ui.button(label="Complete Workout", style=nextcord.ButtonStyle.green, emoji="✅", custom_id="complete_workout_btn")
+    async def finish_callback(self, button, interaction: nextcord.Interaction):
+        cog = interaction.client.get_cog("WorkoutCog")
+        if cog:
+            await cog.users.update_one(
+                {"_id": interaction.user.id}, 
+                {"$inc": {"workout_count": 1}}, 
+                upsert=True
+            )
+            new_stage, new_count = await cog.get_user_stage(interaction.user.id)
+            
+            if new_stage != self.stage:
+                msg = f"🎊 **LEVEL UP!** You've completed {new_count} workouts and reached the **{new_stage}** stage!"
+            else:
+                msg = f"💪 Workout logged! ({new_count} total)"
+        else:
+            msg = "💪 Workout logged!"
+
+        await interaction.response.edit_message(content=msg, embed=None, view=None)
+
+
+class WorkoutSelectView(nextcord.ui.View):
+    def __init__(self, stage, day_name, count):
+        super().__init__(timeout=120)
+        self.stage = stage
+        self.day_name = day_name
+        self.count = count
+
+        self.select = nextcord.ui.Select(
+            placeholder=f"Rank: {stage} | Day: {day_name}",
+            options=[
+                nextcord.SelectOption(label="Gym", emoji="🏋️", description="Weights & Machines"),
+                nextcord.SelectOption(label="Calisthenics", emoji="🤸", description="Bodyweight mastery")
+            ],
+            custom_id="startworkout_select_type"
+        )
+        self.select.callback = self.select_callback
+        self.add_item(self.select)
+
+    async def select_callback(self, itx: nextcord.Interaction):
+        path = self.select.values[0]
+        stage_data = ROUTINES[self.stage][path]
+        
+        if isinstance(stage_data, dict):
+            routine = stage_data.get(self.day_name)
+        else:
+            routine = stage_data
+
+        embed = nextcord.Embed(title=f"🔥 {self.stage} {path} Routine", color=0x9B59B6)
+        embed.set_footer(text=f"Progress: {self.count} workouts completed | Stay disciplined.")
+
+        if routine == "Rest Day":
+            embed.description = "🛋️ **Rest Day!** Recovery is where the muscle grows. See you tomorrow!"
+            await itx.response.edit_message(content=None, embed=embed, view=None)
+            return
+        
+        if self.stage in ["Intermediate", "Hard"]:
+            embed.add_field(name="🧩 Warm-up", value="└ Stretches (5-10 mins)", inline=False)
+        
+        for exercise, sets in routine:
+            embed.add_field(name=f"🧩 **{exercise}**", value=f"└ {sets}", inline=False)
+                    
+        finish_view = WorkoutFinishView(self.stage, self.count)
+        await itx.response.edit_message(content=None, embed=embed, view=finish_view)
+
+
+class ScheduleSelectView(nextcord.ui.View):
+    def __init__(self, stage):
+        super().__init__(timeout=120)
+        self.stage = stage
+
+        self.select = nextcord.ui.Select(
+            placeholder=f"Your Rank: {stage} | Select Type",
+            options=[
+                nextcord.SelectOption(label="Gym", emoji="🏋️", description="Machines & Weights"),
+                nextcord.SelectOption(label="Calisthenics", emoji="🤸", description="Bodyweight Mastery")
+            ],
+            custom_id="schedule_select_type"
+        )
+        self.select.callback = self.select_callback
+        self.add_item(self.select)
+
+    async def select_callback(self, itx: nextcord.Interaction):
+        path = self.select.values[0]
+        routine_data = ROUTINES[self.stage][path]
+                
+        pag_view = SchedulePaginationView(self.stage, path, routine_data)
+        await itx.response.edit_message(content=None, embed=pag_view.create_embed(), view=pag_view)
 
 
 class WorkoutCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        
-        self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
+        if hasattr(bot, "mongo_client") and bot.mongo_client is not None:
+            self.cluster = bot.mongo_client
+        else:
+            self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000)
         self.db = self.cluster["GymBotDB"]
         self.users = self.db["user_stats"]
 
     async def get_user_stage(self, user_id):
-        """Logic to determine user rank based on total workouts logged."""
         user = await self.users.find_one({"_id": user_id})
         if not user: return "Beginner", 0
         count = user.get("workout_count", 0)
@@ -151,99 +241,27 @@ class WorkoutCog(commands.Cog):
     
     @nextcord.slash_command(name="schedule", description="View the weekly training split details")
     async def schedule(self, interaction: nextcord.Interaction):
-        # 1. Defer immediately to extend the 3-second Discord window to 15 minutes
-        await interaction.response.defer(ephemeral=True)
-        
-        # 2. Perform DB operation
+        if not interaction.response.is_done():
+            try:
+                await interaction.response.defer(ephemeral=True)
+            except Exception:
+                pass
         stage, _ = await self.get_user_stage(interaction.user.id)
         
-        view = nextcord.ui.View()
-        options = [
-            nextcord.SelectOption(label="Gym", emoji="🏋️", description="Machines & Weights"),
-            nextcord.SelectOption(label="Calisthenics", emoji="🤸", description="Bodyweight Mastery")
-        ]
-        select = nextcord.ui.Select(placeholder=f"Your Rank: {stage} | Select Type", options=options)
-
-        async def select_callback(itx: nextcord.Interaction):
-            path = select.values[0]
-            routine_data = ROUTINES[stage][path]
-                        
-            pag_view = SchedulePaginationView(stage, path, routine_data)
-            await itx.response.edit_message(content=None, embed=pag_view.create_embed(), view=pag_view)
-
-        select.callback = select_callback
-        view.add_item(select)
-        
-        # 3. Use followup.send instead of response.send_message after deferring
+        view = ScheduleSelectView(stage)
         await interaction.followup.send("Select a training path to see your specific routine:", view=view, ephemeral=True)
-
 
     @nextcord.slash_command(name="startworkout", description="Access your level-based training routine")
     async def startworkout(self, interaction: nextcord.Interaction):
-        # 1. Defer immediately
-        await interaction.response.defer(ephemeral=True)
-
-        # 2. Perform DB operation
+        if not interaction.response.is_done():
+            try:
+                await interaction.response.defer(ephemeral=True)
+            except Exception:
+                pass
         stage, count = await self.get_user_stage(interaction.user.id)
         day_name = datetime.now().strftime("%A")
         
-        view = View()
-        options = [
-            nextcord.SelectOption(label="Gym", emoji="🏋️", description="Weights & Machines"),
-            nextcord.SelectOption(label="Calisthenics", emoji="🤸", description="Bodyweight mastery")
-        ]
-        select = Select(placeholder=f"Rank: {stage} | Day: {day_name}", options=options)
-
-        async def select_callback(itx: nextcord.Interaction):
-            path = select.values[0]
-            stage_data = ROUTINES[stage][path]
-            
-            if isinstance(stage_data, dict):
-                routine = stage_data.get(day_name)
-            else:
-                routine = stage_data
-
-            embed = nextcord.Embed(title=f"🔥 {stage} {path} Routine", color=0x9B59B6)
-            embed.set_footer(text=f"Progress: {count} workouts completed | Stay disciplined.")
-
-            if routine == "Rest Day":
-                embed.description = "🛋️ **Rest Day!** Recovery is where the muscle grows. See you tomorrow!"
-                return await itx.response.send_message(embed=embed, ephemeral=True)
-            
-            if stage in ["Intermediate", "Hard"]:
-                embed.add_field(name="🧩 Warm-up", value="└ Stretches (5-10 mins)", inline=False)
-            
-            for exercise, sets in routine:
-                embed.add_field(name=f"🧩 **{exercise}**", value=f"└ {sets}", inline=False)
-                        
-            finish_view = View()
-            finish_button = Button(label="Complete Workout", style=nextcord.ButtonStyle.green, emoji="✅")
-
-            async def finish_callback(f_itx: nextcord.Interaction):
-                await self.users.update_one(
-                    {"_id": f_itx.user.id}, 
-                    {"$inc": {"workout_count": 1}}, 
-                    upsert=True
-                )
-                                
-                new_stage, new_count = await self.get_user_stage(f_itx.user.id)
-                
-                if new_stage != stage:
-                    msg = f"🎊 **LEVEL UP!** You've completed {new_count} workouts and reached the **{new_stage}** stage!"
-                else:
-                    msg = f"💪 Workout logged! ({new_count} total)"
-                
-                await f_itx.response.send_message(msg, ephemeral=True)
-
-            finish_button.callback = finish_callback
-            finish_view.add_item(finish_button)
-            
-            await itx.response.send_message(embed=embed, view=finish_view, ephemeral=True)
-
-        select.callback = select_callback
-        view.add_item(select)
-        
-        # 3. Use followup.send
+        view = WorkoutSelectView(stage, day_name, count)
         await interaction.followup.send("Choose your focus for today:", view=view, ephemeral=True)
 
 def setup(bot):

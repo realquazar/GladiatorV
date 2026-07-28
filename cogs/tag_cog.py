@@ -7,7 +7,10 @@ import os
 class TagCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot        
-        self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
+        if hasattr(bot, "mongo_client") and bot.mongo_client is not None:
+            self.cluster = bot.mongo_client
+        else:
+            self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000)
         self.db = self.cluster["RadonDB"]
         self.tags = self.db["tags"]
 

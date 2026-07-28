@@ -225,7 +225,10 @@ class FlexPaginationView(View):
 class FlexCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"))
+        if hasattr(bot, "mongo_client") and bot.mongo_client is not None:
+            self.cluster = bot.mongo_client
+        else:
+            self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000)
         self.collection = self.cluster["GymBotDB"]["user_flexes"]
 
     async def delete_specific_flex(self, user_id, target_item):
@@ -246,11 +249,12 @@ class FlexCog(commands.Cog):
 
     @nextcord.slash_command(name="flex", description="Show progress log")
     async def flex(self, interaction: nextcord.Interaction):
+        await interaction.response.defer()
         user_data = await self.collection.find_one({"_id": interaction.user.id})
         data = user_data.get("flexes", []) if user_data else []
         view = FlexPaginationView(interaction.user.id, interaction.user.display_name, data, self)
         file = nextcord.File(fp="./assets/knight.png", filename="knight.png")
-        await interaction.response.send_message(embed=view.create_embed(), view=view, file=file)
+        await interaction.followup.send(embed=view.create_embed(), view=view, file=file)
 
 def setup(bot):
     bot.add_cog(FlexCog(bot))
