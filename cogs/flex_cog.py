@@ -249,12 +249,29 @@ class FlexCog(commands.Cog):
 
     @nextcord.slash_command(name="flex", description="Show progress log")
     async def flex(self, interaction: nextcord.Interaction):
-        await interaction.response.defer()
-        user_data = await self.collection.find_one({"_id": interaction.user.id})
-        data = user_data.get("flexes", []) if user_data else []
+        if not interaction.response.is_done():
+            try:
+                await interaction.response.defer()
+            except Exception:
+                pass
+        try:
+            user_data = await self.collection.find_one({"_id": interaction.user.id})
+            data = user_data.get("flexes", []) if user_data else []
+        except Exception as e:
+            print(f"MongoDB error in /flex: {e}")
+            data = []
         view = FlexPaginationView(interaction.user.id, interaction.user.display_name, data, self)
-        file = nextcord.File(fp="./assets/knight.png", filename="knight.png")
-        await interaction.followup.send(embed=view.create_embed(), view=view, file=file)
+        
+        file = None
+        for p in ["./assets/knight.png", "assets/knight.png", os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "knight.png")]:
+            if os.path.exists(p):
+                file = nextcord.File(fp=p, filename="knight.png")
+                break
+        
+        kwargs = {"embed": view.create_embed(), "view": view}
+        if file:
+            kwargs["file"] = file
+        await interaction.followup.send(**kwargs)
 
 def setup(bot):
     bot.add_cog(FlexCog(bot))

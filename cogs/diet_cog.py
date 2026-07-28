@@ -30,6 +30,13 @@ FOOD_DATA = [
     {"name": "Quinoa", "protein": 4, "calories": 120}
 ]
 
+def get_food_file():
+    paths = ["assets/food.png", os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "food.png")]
+    for p in paths:
+        if os.path.exists(p):
+            return nextcord.File(p, filename="food.png")
+    return None
+
 class DietView(View):
     def __init__(self, data, sort_type):
         super().__init__(timeout=60)
@@ -48,7 +55,8 @@ class DietView(View):
         current_items = self.data[start:end]
 
         embed = nextcord.Embed(title=title, color=color)
-        embed.set_thumbnail(url="attachment://food.png")
+        if os.path.exists("assets/food.png") or os.path.exists(os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "food.png")):
+            embed.set_thumbnail(url="attachment://food.png")
         embed.set_footer(text=f"Page {self.page + 1} of {self.max_pages + 1} | Portions per 100g")
 
         description = ""
@@ -65,15 +73,21 @@ class DietView(View):
     async def back(self, button, interaction):
         if self.page > 0:
             self.page -= 1
-            file = nextcord.File("assets/food.png", filename="food.png")
-            await interaction.response.edit_message(embed=self.create_embed(), view=self, file=file)
+            file = get_food_file()
+            kwargs = {"embed": self.create_embed(), "view": self}
+            if file:
+                kwargs["file"] = file
+            await interaction.response.edit_message(**kwargs)
 
     @nextcord.ui.button(label="Next", style=nextcord.ButtonStyle.gray)
     async def next(self, button, interaction):
         if self.page < self.max_pages:
             self.page += 1
-            file = nextcord.File("assets/food.png", filename="food.png")
-            await interaction.response.edit_message(embed=self.create_embed(), view=self, file=file)
+            file = get_food_file()
+            kwargs = {"embed": self.create_embed(), "view": self}
+            if file:
+                kwargs["file"] = file
+            await interaction.response.edit_message(**kwargs)
 
 class DietDropdown(Select):
     def __init__(self):
@@ -90,9 +104,12 @@ class DietDropdown(Select):
         else:
             sorted_data = sorted(FOOD_DATA, key=lambda x: x["calories"])
         
-        file = nextcord.File("assets/food.png", filename="food.png")
+        file = get_food_file()
         view = DietView(sorted_data, sort_type)
-        await interaction.response.edit_message(embed=view.create_embed(), view=view, file=file)
+        kwargs = {"embed": view.create_embed(), "view": view}
+        if file:
+            kwargs["file"] = file
+        await interaction.response.edit_message(**kwargs)
 
 class DietCog(commands.Cog):
     def __init__(self, bot):
@@ -100,6 +117,12 @@ class DietCog(commands.Cog):
 
     @nextcord.slash_command(name="diet", description="Browse nutritional data with a food guide")
     async def diet(self, interaction: nextcord.Interaction):
+        if not interaction.response.is_done():
+            try:
+                await interaction.response.defer(ephemeral=True)
+            except Exception:
+                pass
+
         view = View()
         view.add_item(DietDropdown())
         
@@ -109,13 +132,18 @@ class DietCog(commands.Cog):
             color=0x9B59B6
         )
                 
-        file = nextcord.File("assets/food.png", filename="food.png")
-        embed.set_thumbnail(url="attachment://food.png")
+        file = get_food_file()
+        if file:
+            embed.set_thumbnail(url="attachment://food.png")
         
+        kwargs = {"embed": embed, "view": view, "ephemeral": True}
+        if file:
+            kwargs["file"] = file
+
         if interaction.response.is_done():
-            await interaction.followup.send(embed=embed, view=view, file=file, ephemeral=True)
+            await interaction.followup.send(**kwargs)
         else:
-            await interaction.response.send_message(embed=embed, view=view, file=file, ephemeral=True)
+            await interaction.response.send_message(**kwargs)
 
 def setup(bot):
     bot.add_cog(DietCog(bot))

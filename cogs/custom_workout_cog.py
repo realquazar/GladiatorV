@@ -23,16 +23,19 @@ class CreateScheduleModal(Modal):
             "days": {day: [] for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
         }
         
-        await self.cog.collection.update_one(
-            {"_id": interaction.user.id},
-            {"$push": {"schedules": new_schedule}},
-            upsert=True
-        )
-                
-        user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
-        current_schedules = user_data.get("schedules", [])
-        self.view_ref.current_sched_idx = len(current_schedules) - 1
-        
+        try:
+            await self.cog.collection.update_one(
+                {"_id": interaction.user.id},
+                {"$push": {"schedules": new_schedule}},
+                upsert=True
+            )
+            user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
+            current_schedules = user_data.get("schedules", []) if user_data else []
+        except Exception as e:
+            print(f"MongoDB error in CreateScheduleModal: {e}")
+            current_schedules = []
+
+        self.view_ref.current_sched_idx = max(0, len(current_schedules) - 1)
         await self.view_ref.refresh_data(interaction)
 
 class AddExerciseModal(Modal):
@@ -45,18 +48,24 @@ class AddExerciseModal(Modal):
         self.add_item(self.reps)
 
     async def callback(self, interaction: nextcord.Interaction):
-        user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
-        schedules = user_data.get("schedules", [])
-        
-        entry = {"exercise": f"🧩 {self.ex.value.strip()}", "reps": self.reps.value.strip()}
-        schedules[self.sched_idx]["days"][self.day].append(entry)
-        
-        await self.cog.collection.update_one(
-            {"_id": interaction.user.id},
-            {"$set": {"schedules": schedules}}
-        )
+        try:
+            user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
+            schedules = user_data.get("schedules", []) if user_data else []
+            
+            if 0 <= self.sched_idx < len(schedules):
+                entry = {"exercise": f"🧩 {self.ex.value.strip()}", "reps": self.reps.value.strip()}
+                if "days" not in schedules[self.sched_idx]:
+                    schedules[self.sched_idx]["days"] = {day: [] for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
+                schedules[self.sched_idx]["days"][self.day].append(entry)
+                
+                await self.cog.collection.update_one(
+                    {"_id": interaction.user.id},
+                    {"$set": {"schedules": schedules}}
+                )
+        except Exception as e:
+            print(f"MongoDB error in AddExerciseModal: {e}")
+            
         await self.view_ref.refresh_data(interaction)
-
 
 class WorkoutView(View):
     def __init__(self, user_name, schedules, cog):
@@ -71,6 +80,8 @@ class WorkoutView(View):
     def setup_selectors(self):
         self.clear_items()
         has_schedules = len(self.schedules) > 0
+        if self.current_sched_idx >= len(self.schedules):
+            self.current_sched_idx = max(0, len(self.schedules) - 1)
         
         sched_options = []
         if not has_schedules:
@@ -78,7 +89,7 @@ class WorkoutView(View):
         else:
             for i, s in enumerate(self.schedules):
                 sched_options.append(nextcord.SelectOption(
-                    label=s["name"], 
+                    label=s.get("name", f"Schedule {i+1}"), 
                     value=str(i), 
                     default=(i == self.current_sched_idx)
                 ))
@@ -127,13 +138,19 @@ class WorkoutView(View):
         self.add_item(clear_btn)
 
     def get_file(self):
-        if os.path.exists("assets/armor.jpg"):
-            return nextcord.File("assets/armor.jpg", filename="armor.jpg")
+        paths = ["assets/armor.jpg", os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "armor.jpg")]
+        for p in paths:
+            if os.path.exists(p):
+                return nextcord.File(p, filename="armor.jpg")
         return None
 
-    async def refresh_data(self, interaction):
-        user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
-        self.schedules = user_data.get("schedules", []) if user_data else []
+    async def refresh_data(self, interaction: nextcord.Interaction):
+        try:
+            user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
+            self.schedules = user_data.get("schedules", []) if user_data else []
+        except Exception as e:
+            print(f"MongoDB error in refresh_data: {e}")
+            
         self.setup_selectors()
         
         kwargs = {"embed": self.create_embed(), "view": self}
@@ -141,14 +158,18 @@ class WorkoutView(View):
         if file:
             kwargs["file"] = file
             
-        await interaction.response.edit_message(**kwargs)
+        if interaction.response.is_done():
+            await interaction.followup.send(**kwargs, ephemeral=True)
+        else:
+            await interaction.response.edit_message(**kwargs)
 
     async def change_schedule(self, interaction: nextcord.Interaction):
-        if interaction.data['values'][0] == "none": return
+        if not interaction.data.get('values') or interaction.data['values'][0] == "none": return
         self.current_sched_idx = int(interaction.data['values'][0])
         await self.refresh_data(interaction)
 
     async def change_day(self, interaction: nextcord.Interaction):
+        if not interaction.data.get('values'): return
         self.current_day = interaction.data['values'][0]
         await self.refresh_data(interaction)
 
@@ -159,7 +180,10 @@ class WorkoutView(View):
         await interaction.response.send_modal(AddExerciseModal(self.cog, self, self.current_sched_idx, self.current_day))
 
     async def clear_all_data(self, interaction: nextcord.Interaction):
-        await self.cog.collection.update_one({"_id": interaction.user.id}, {"$set": {"schedules": []}})
+        try:
+            await self.cog.collection.update_one({"_id": interaction.user.id}, {"$set": {"schedules": []}})
+        except Exception as e:
+            print(f"MongoDB error in clear_all_data: {e}")
         self.schedules = []
         self.current_sched_idx = 0
         self.setup_selectors()
@@ -169,30 +193,36 @@ class WorkoutView(View):
         if file:
             kwargs["file"] = file
             
-        await interaction.response.edit_message(**kwargs)
+        if interaction.response.is_done():
+            await interaction.followup.send(**kwargs, ephemeral=True)
+        else:
+            await interaction.response.edit_message(**kwargs)
 
     def create_embed(self):
         embed = nextcord.Embed(
             title=f"🛡️ {self.user_name}'s Private Armory", 
             color=0x3498db
         )
-        if os.path.exists("assets/armor.jpg"):
+        if os.path.exists("assets/armor.jpg") or os.path.exists(os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "armor.jpg")):
             embed.set_thumbnail(url="attachment://armor.jpg")
         
         if not self.schedules:
             embed.description = "❌ **No schedules found.**\n\nClick the **New Schedule** button below to create your first plan."
             return embed
 
+        if self.current_sched_idx >= len(self.schedules):
+            self.current_sched_idx = max(0, len(self.schedules) - 1)
+
         sched = self.schedules[self.current_sched_idx]
-        day_data = sched["days"].get(self.current_day, [])
+        day_data = sched.get("days", {}).get(self.current_day, [])
         
-        embed.description = f"**Current Plan:** `{sched['name']}`\n**Day:** `{self.current_day}`"
+        embed.description = f"**Current Plan:** `{sched.get('name', 'Schedule')}`\n**Day:** `{self.current_day}`"
         
         if not day_data:
             embed.add_field(name="Rest Day", value="No exercises recorded for today.", inline=False)
         else:
             for i, ex in enumerate(day_data, 1):
-                embed.add_field(name=f"{i}. {ex['exercise']}", value=f"└ {ex['reps']}", inline=False)
+                embed.add_field(name=f"{i}. {ex.get('exercise', 'Exercise')}", value=f"└ {ex.get('reps', '-')}", inline=False)
         
         embed.set_footer(text="Switch schedules or days using the menus above.")
         return embed
@@ -215,14 +245,19 @@ class CustomWorkoutCog(commands.Cog):
             except Exception:
                 pass
 
-        user_data = await self.collection.find_one({"_id": interaction.user.id})
-        schedules = user_data.get("schedules", []) if user_data else []
-        
+        try:
+            user_data = await self.collection.find_one({"_id": interaction.user.id})
+            schedules = user_data.get("schedules", []) if user_data else []
+        except Exception as e:
+            print(f"MongoDB error in /myworkout: {e}")
+            schedules = []
+
         view = WorkoutView(interaction.user.display_name, schedules, self)
         
         kwargs = {
             "embed": view.create_embed(), 
-            "view": view
+            "view": view,
+            "ephemeral": True
         }
         
         file = view.get_file()
