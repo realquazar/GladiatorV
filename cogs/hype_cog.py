@@ -5,7 +5,7 @@ class HypeCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.slash_command(name="hype", description="Get the official Radon workout playlist")
+    @nextcord.slash_command(name="hype", description="Get the official Gladiator V workout playlist")
     async def hype(self, interaction: nextcord.Interaction):
         playlist_url = "https://music.youtube.com/playlist?list=PLiOIgEQJFWM75NepWUZEVG8U2fKhqRoOf"
         
