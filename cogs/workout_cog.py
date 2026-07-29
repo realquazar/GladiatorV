@@ -5,47 +5,203 @@ import os
 from datetime import datetime
 
 ROUTINES = {
-    "Beginner": {
-        "Gym": [("Pushups", "3x10"), ("Bicep curls", "3x10"), ("Lateral raises", "3x10"), ("Crunches", "3x10")],
-        "Calisthenics": [("Push ups", "3x10"), ("Pull ups", "3x10"), ("Dips", "3x10"), ("Pike push ups", "3x10")]
-    },
-    "Intermediate": {
+    "Novice Initiate": {
         "Gym": {
-            "Monday": [("Bicep Curls", "3x10"), ("Hammer Curls", "3x10"), ("Tricep Pushdowns", "3x10"), ("Overhead Extensions", "3x10"), ("Barbell Curls", "3x10")],
-            "Tuesday": [("Bicep Curls", "3x10"), ("Hammer Curls", "3x10"), ("Tricep Pushdowns", "3x10"), ("Overhead Extensions", "3x10"), ("Barbell Curls", "3x10")],
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x3"), ("Hammer curls (8 kgs)", "10x3")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x3"), ("Hammer curls (8 kgs)", "10x3")],
             "Wednesday": "Rest Day",
-            "Thursday": [("Bench Press", "3x10"), ("Incline DB Press", "3x10"), ("Chest Flys", "3x10"), ("Leg Raises", "3x15"), ("Plank", "60s")],
-            "Friday": [("Bench Press", "3x10"), ("Incline DB Press", "3x10"), ("Chest Flys", "3x10"), ("Leg Raises", "3x15"), ("Plank", "60s")],
-            "Saturday": [("Back Squats", "3x10"), ("Leg Press", "3x10"), ("Calf Raises", "3x15"), ("Leg Extensions", "3x10")],
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "7x1"), ("Seated Cable row", "7x1")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "7x1"), ("Seated Cable row", "7x1")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "7x1"), ("Weighted squats (3kg/6.5lbs)", "7x1"), ("Treadmill", "5 minutes")],
             "Sunday": "Rest Day"
         },
         "Calisthenics": {
-            "Monday": [("Push ups", "3x10"), ("Inclined push ups", "3x10"), ("Dips", "3x10"), ("Pull ups (close)", "3x10"), ("Pull ups (wide)", "3x10"), ("Muscle ups", "3x10")],
-            "Tuesday": [("Push ups", "3x10"), ("Inclined push ups", "3x10"), ("Dips", "3x10"), ("Pull ups (close)", "3x10"), ("Pull ups (wide)", "3x10"), ("Muscle ups", "3x10")],
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "7x1"), ("Elevated push ups", "7x1")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "7x1"), ("Elevated push ups", "7x1")],
             "Wednesday": "Rest Day",
-            "Thursday": [("Push ups", "3x10"), ("Diamond push ups", "3x10"), ("Plank hold", "30-40s"), ("Crunches", "3x10"), ("Frog stand", "20-30s")],
-            "Friday": [("Push ups", "3x10"), ("Diamond push ups", "3x10"), ("Plank hold", "30-40s"), ("Crunches", "3x10"), ("Frog stand", "20-30s")],
-            "Saturday": [("Squats", "3x10"), ("Mountain climbers", "3x30"), ("Jog/run", "30 mins")],
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "7x1"), ("Plank", "1 set")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "7x1"), ("Plank", "1 set")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "7x1"), ("Bodyweight lunges", "7x1"), ("Running", "5 minutes")],
             "Sunday": "Rest Day"
         }
     },
-    "Hard": {
+    "Bronze Legionnaire": {
         "Gym": {
-            "Monday": [("Bicep Curls", "4x10"), ("Hammer Curls", "4x10"), ("Tricep Pushdowns", "4x10"), ("Overhead Extensions", "4x10"), ("Barbell Curls", "4x10")],
-            "Tuesday": [("Bicep Curls", "4x10"), ("Hammer Curls", "4x10"), ("Tricep Pushdowns", "4x10"), ("Overhead Extensions", "4x10"), ("Barbell Curls", "4x10")],
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x2"), ("Hammer curls (8 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x2"), ("Hammer curls (8 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2")],
             "Wednesday": "Rest Day",
-            "Thursday": [("Bench Press", "4x10"), ("Incline DB Press", "4x10"), ("Chest Flys", "4x10"), ("Leg Raises", "4x20"), ("Plank", "90s")],
-            "Friday": [("Bench Press", "4x10"), ("Incline DB Press", "4x10"), ("Chest Flys", "4x10"), ("Leg Raises", "4x20"), ("Plank", "90s")],
-            "Saturday": [("Back Squats", "4x10"), ("Leg Press", "4x10"), ("Calf Raises", "4x20"), ("Leg Extensions", "4x10")],
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Weighted squats", "10x2"), ("Leg press", "10x2"), ("Leg extension", "10x2")],
             "Sunday": "Rest Day"
         },
         "Calisthenics": {
-            "Monday": [("Push ups", "4x10"), ("Inclined push ups", "4x10"), ("Dips", "4x10"), ("Pull ups (close)", "4x10"), ("Pull ups (wide)", "4x10"), ("Muscle ups", "4x10")],
-            "Tuesday": [("Push ups", "4x10"), ("Inclined push ups", "4x10"), ("Dips", "4x10"), ("Pull ups (close)", "4x10"), ("Pull ups (wide)", "4x10"), ("Muscle ups", "4x10")],
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x2"), ("Elevated push ups", "10x2"), ("Chair assisted dips", "10x2"), ("Pull ups", "10x2")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x2"), ("Elevated push ups", "10x2"), ("Chair assisted dips", "10x2"), ("Pull ups", "10x2")],
             "Wednesday": "Rest Day",
-            "Thursday": [("Push ups", "4x10"), ("Diamond push ups", "4x10"), ("Plank hold", "60s"), ("Crunches", "4x10"), ("Frog stand", "40-50s")],
-            "Friday": [("Push ups", "4x10"), ("Diamond push ups", "4x10"), ("Plank hold", "60s"), ("Crunches", "4x10"), ("Frog stand", "40-50s")],
-            "Saturday": [("Squats", "4x10"), ("Mountain climbers", "4x30"), ("Jog/run", "45 mins")],
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x2"), ("Twist crunches", "10x2"), ("Push ups", "10x2"), ("Plank", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x2"), ("Twist crunches", "10x2"), ("Push ups", "10x2"), ("Plank", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x2"), ("Bodyweight lunges", "10x2"), ("Jumping", "10x2"), ("Running", "10 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Iron Vanguard": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x3"), ("Hammer curls (8 kgs)", "10x3"), ("Overhead Triceps extension", "10x3"), ("Preacher curls", "10x3")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x3"), ("Hammer curls (8 kgs)", "10x3"), ("Overhead Triceps extension", "10x3"), ("Preacher curls", "10x3")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x3"), ("Seated Cable row", "10x3"), ("Cable lats pulldown", "10x3"), ("Pec dec", "10x3"), ("Bench press (10-15 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x3"), ("Seated Cable row", "10x3"), ("Cable lats pulldown", "10x3"), ("Pec dec", "10x3"), ("Bench press (10-15 kg)", "2x5")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Weighted squats", "10x2"), ("Leg press", "10x2"), ("Leg extension", "10x2"), ("Incline leg press", "10x2"), ("Seated leg curl", "10x2")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x2"), ("Frog stand with parallettes", "2 sets"), ("Pull ups", "10x3"), ("Chin ups", "10x3")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x2"), ("Frog stand with parallettes", "2 sets"), ("Pull ups", "10x3"), ("Chin ups", "10x3")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x2"), ("Twist crunches", "10x2"), ("Push ups", "10x2"), ("Inclined push ups", "10x2"), ("Hindu push ups", "10x1"), ("Chair assisted dips", "10x2")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x2"), ("Twist crunches", "10x2"), ("Push ups", "10x2"), ("Inclined push ups", "10x2"), ("Hindu push ups", "10x1"), ("Chair assisted dips", "10x2")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "1 set"), ("Jumping", "10x3"), ("Running", "20 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Steel Centurion": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x3"), ("Hammer curls (8 kgs)", "10x3"), ("Overhead Triceps extension", "10x3"), ("Preacher curls", "10x3"), ("Overhead press", "10x3")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x3"), ("Hammer curls (8 kgs)", "10x3"), ("Overhead Triceps extension", "10x3"), ("Preacher curls", "10x3"), ("Overhead press", "10x3")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x3"), ("Seated Cable row", "10x3"), ("Cable lats pulldown", "10x3"), ("Pec dec", "10x3"), ("Bench press (20-40 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x3"), ("Seated Cable row", "10x3"), ("Cable lats pulldown", "10x3"), ("Pec dec", "10x3"), ("Bench press (20-40 kg)", "2x5")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Weighted squats", "10x3"), ("Leg press", "10x3"), ("Leg extension", "10x3"), ("Incline leg press", "10x3"), ("Seated leg curl", "10x3")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x3"), ("Pull ups", "10x3"), ("Chin ups", "10x3"), ("Frog stand with parallettes", "3 sets")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x3"), ("Pull ups", "10x3"), ("Chin ups", "10x3"), ("Frog stand with parallettes", "3 sets")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x3"), ("Twist crunches", "10x3"), ("Push ups", "10x3"), ("Inclined push ups", "10x3"), ("Hindu push ups", "10x3"), ("Chair assisted dips", "10x3"), ("L-sit", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x3"), ("Twist crunches", "10x3"), ("Push ups", "10x3"), ("Inclined push ups", "10x3"), ("Hindu push ups", "10x3"), ("Chair assisted dips", "10x3"), ("L-sit", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "10x3"), ("Jumping", "10x3"), ("Running", "30 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Gilded Champion": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x4"), ("Hammer curls (8 kgs)", "10x4"), ("Overhead Triceps extension", "10x4"), ("Preacher curls", "10x4"), ("Overhead press", "10x4")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "10x4"), ("Hammer curls (8 kgs)", "10x4"), ("Overhead Triceps extension", "10x4"), ("Preacher curls", "10x4"), ("Overhead press", "10x4")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x4"), ("Seated Cable row", "10x4"), ("Cable lats pulldown", "10x4"), ("Pec dec", "10x4"), ("Bench press (20-40 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches / Ab crunch machine", "10x4"), ("Seated Cable row", "10x4"), ("Cable lats pulldown", "10x4"), ("Pec dec", "10x4"), ("Bench press (20-40 kg)", "2x5")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Weighted squats", "10x3"), ("Leg press", "10x3"), ("Leg extension", "10x3"), ("Incline leg press", "10x3"), ("Seated leg curl", "10x3")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x4"), ("Pull ups", "10x4"), ("Chin ups", "10x4"), ("Frog stand with parallettes", "2 sets"), ("Tuck front lever hold", "2 sets")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "10x4"), ("Pull ups", "10x4"), ("Chin ups", "10x4"), ("Frog stand with parallettes", "2 sets"), ("Tuck front lever hold", "2 sets")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x4"), ("Twist crunches", "10x4"), ("Push ups", "10x4"), ("Inclined push ups", "10x4"), ("Hindu push ups", "10x4"), ("Chair assisted dips", "10x4"), ("L-sit", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "10x4"), ("Twist crunches", "10x4"), ("Push ups", "10x4"), ("Inclined push ups", "10x4"), ("Hindu push ups", "10x4"), ("Chair assisted dips", "10x4"), ("L-sit", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "10x3"), ("Jumping", "10x3"), ("Running", "40 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Arena Master": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "15x3"), ("Hammer curls (8 kgs)", "15x3"), ("Overhead Triceps extension", "15x3"), ("Preacher curls", "15x3"), ("Overhead press", "15x3")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (8 kgs)", "15x3"), ("Hammer curls (8 kgs)", "15x3"), ("Overhead Triceps extension", "15x3"), ("Preacher curls", "15x3"), ("Overhead press", "15x3")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x2"), ("Crunches / Ab crunch machine", "15x3"), ("Seated Cable row", "15x3"), ("Cable lats pulldown", "15x3"), ("Pec dec", "15x3"), ("Bench press (20-40 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x2"), ("Crunches / Ab crunch machine", "15x3"), ("Seated Cable row", "15x3"), ("Cable lats pulldown", "15x3"), ("Pec dec", "15x3"), ("Bench press (20-40 kg)", "2x5")],
+            "Saturday": [("Weighted squats", "10x3"), ("Leg press", "10x3"), ("Leg extension", "10x3"), ("Incline leg press", "10x3"), ("Seated leg curl", "10x3")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "15x3"), ("Pull ups", "15x3"), ("Chin ups", "15x3"), ("Frog stand with parallettes", "2 sets"), ("Tuck front lever hold", "2 sets"), ("Negative front lever raises", "1x1")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "15x3"), ("Pull ups", "15x3"), ("Chin ups", "15x3"), ("Frog stand with parallettes", "2 sets"), ("Tuck front lever hold", "2 sets"), ("Negative front lever raises", "1x1")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x3"), ("Twist crunches", "15x3"), ("Push ups", "15x3"), ("Inclined push ups", "15x3"), ("Hindu push ups", "15x3"), ("Chair assisted dips", "15x3"), ("L-sit", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x3"), ("Twist crunches", "15x3"), ("Push ups", "15x3"), ("Inclined push ups", "15x3"), ("Hindu push ups", "15x3"), ("Chair assisted dips", "15x3"), ("L-sit", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "10x3"), ("Jumping", "10x3"), ("Running", "30 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Gold Gladiator": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Saturday": [("Weighted squats", "10x3"), ("Leg press", "10x3"), ("Leg extension", "10x3"), ("Incline leg press", "10x3"), ("Seated leg curl", "10x3")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "10x3"), ("Jumping", "10x3"), ("Running", "30 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Apex Centurion": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Saturday": [("Weighted squats", "10x3"), ("Leg press", "10x3"), ("Leg extension", "10x3"), ("Incline leg press", "10x3"), ("Seated leg curl", "10x3")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "10x3"), ("Jumping", "10x3"), ("Running", "30 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Titan Ascendant": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Saturday": [("Weighted squats", "10x3"), ("Leg press", "10x3"), ("Leg extension", "10x3"), ("Incline leg press", "10x3"), ("Seated leg curl", "10x3")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "10x3"), ("Jumping", "10x3"), ("Running", "30 minutes")],
+            "Sunday": "Rest Day"
+        }
+    },
+    "Gladiator Maximus": {
+        "Gym": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Dumbbell bicep curls (10 kgs)", "10x2"), ("Hammer curls (10 kgs)", "10x2"), ("Overhead Triceps extension", "10x2"), ("Preacher curls", "10x2"), ("Overhead press", "10x2")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Pull ups", "10x3"), ("Crunches / Ab crunch machine", "10x2"), ("Seated Cable row", "10x2"), ("Cable lats pulldown", "10x2"), ("Pec dec", "10x2"), ("Bench press (20-40 kg)", "2x5")],
+            "Saturday": [("Weighted squats", "10x3"), ("Leg press", "10x3"), ("Leg extension", "10x3"), ("Incline leg press", "10x3"), ("Seated leg curl", "10x3")],
+            "Sunday": "Rest Day"
+        },
+        "Calisthenics": {
+            "Monday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Tuesday": [("Arm + neck rotation", "10x1"), ("Push Ups", "20x2"), ("Pull ups", "20x2"), ("Chin ups", "20x2"), ("Frog stand with parallettes", "2 sets"), ("advance tuck front lever hold", "2 sets"), ("Negative front lever raises", "3x1")],
+            "Wednesday": "Rest Day",
+            "Thursday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Friday": [("Arm + neck rotation", "10x1"), ("Crunches", "15x2"), ("Twist crunches", "10x2"), ("Push ups", "20x2"), ("Inclined push ups", "20x2"), ("Hindu push ups", "20x2"), ("Chair assisted dips", "20x2"), ("L-sit", "2 sets")],
+            "Saturday": [("Arm + neck rotation", "10x1"), ("Bodyweight squats", "10x3"), ("Weighted squats", "10x3"), ("Jumping", "10x3"), ("Running", "30 minutes")],
             "Sunday": "Rest Day"
         }
     }
@@ -186,7 +342,7 @@ class WorkoutSelectView(nextcord.ui.View):
             await itx.response.edit_message(content=None, embed=embed, view=None)
             return
         
-        if self.stage in ["Intermediate", "Hard"]:
+        if self.stage not in ["Novice Initiate", "Bronze Legionnaire"]:
             embed.add_field(name="🧩 Warm-up", value="└ Stretches (5-10 mins)", inline=False)
         
         for exercise, sets in routine:
@@ -232,12 +388,19 @@ class WorkoutCog(commands.Cog):
 
     async def get_user_stage(self, user_id):
         user = await self.users.find_one({"_id": user_id})
-        if not user: return "Beginner", 0
+        if not user: return "Novice Initiate", 0
         count = user.get("workout_count", 0)
         
-        if count >= 30: return "Hard", count
-        if count >= 10: return "Intermediate", count
-        return "Beginner", count
+        if count >= 1000: return "Gladiator Maximus", count
+        if count >= 810: return "Titan Ascendant", count
+        if count >= 600: return "Apex Centurion", count
+        if count >= 390: return "Gold Gladiator", count
+        if count >= 330: return "Arena Master", count
+        if count >= 240: return "Gilded Champion", count
+        if count >= 150: return "Steel Centurion", count
+        if count >= 120: return "Iron Vanguard", count
+        if count >= 60: return "Bronze Legionnaire", count
+        return "Novice Initiate", count
     
     @nextcord.slash_command(name="schedule", description="View the weekly training split details")
     async def schedule(self, interaction: nextcord.Interaction):
