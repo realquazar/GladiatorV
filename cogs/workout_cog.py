@@ -337,9 +337,11 @@ class WorkoutSelectView(nextcord.ui.View):
         embed = nextcord.Embed(title=f"🔥 {self.stage} {path} Routine", color=0x9B59B6)
         embed.set_footer(text=f"Progress: {self.count} workouts completed | Stay disciplined.")
 
+        disclaimer_text = "⚠️ **Warning:** Leave the ego at the door. Strength comes from consistency and understanding your limits, do not ego lift or overexert yourself. Safety first warriors! 💪"
+
         if routine == "Rest Day":
             embed.description = "🛋️ **Rest Day!** Recovery is where the muscle grows. See you tomorrow!"
-            await itx.response.edit_message(content=None, embed=embed, view=None)
+            await itx.response.edit_message(content=f"{disclaimer_text}\n\n{embed.description}" if not embed.description else disclaimer_text, embed=embed, view=None)
             return
         
         if self.stage not in ["Novice Initiate", "Bronze Legionnaire"]:
@@ -349,7 +351,8 @@ class WorkoutSelectView(nextcord.ui.View):
             embed.add_field(name=f"🧩 **{exercise}**", value=f"└ {sets}", inline=False)
                     
         finish_view = WorkoutFinishView(self.stage, self.count)
-        await itx.response.edit_message(content=None, embed=embed, view=finish_view)
+        
+        await itx.response.edit_message(content=disclaimer_text, embed=embed, view=finish_view)
 
 
 class ScheduleSelectView(nextcord.ui.View):
@@ -426,6 +429,36 @@ class WorkoutCog(commands.Cog):
         
         view = WorkoutSelectView(stage, day_name, count)
         await interaction.followup.send("Choose your focus for today:", view=view, ephemeral=True)
+
+    @nextcord.slash_command(name="levels", description="View the grueling path of discipline, ranks, and workout milestones")
+    async def levels(self, interaction: nextcord.Interaction):
+        if not interaction.response.is_done():
+            try:
+                await interaction.response.defer(ephemeral=True)
+            except Exception:
+                pass
+
+        embed = nextcord.Embed(
+            title="⚔️ The Path of Ascendance: Ranks & Milestones",
+            description=(
+                "*Discipline is forged in repetition. Every session breaks a limit; every milestone claims a new rank.*\n"
+                "Here is the strict hierarchy of the arena—rise through the ranks or remain in the dust.\n\n"
+                "• **Level 1:** Novice / Beginner: Month 1 = 30 workouts\n"
+                "• **Level 2:** Bronze Legionnaire: Month 2 = 60 workouts\n"
+                "• **Level 3:** Iron Vanguard: Month 4 = 120 workouts\n"
+                "• **Level 4:** Steel Centurion: Month 5 = 150 workouts\n"
+                "• **Level 5:** Gilded Champion: Month 8 = 240 workouts\n"
+                "• **Level 6:** Arena Master: Month 11 = 330 workouts\n"
+                "• **Level 7:** Gold Gladiator: Month 13 = 390 workouts\n"
+                "• **Level 8:** Apex Centurion: Month 20 = 600 workouts\n"
+                "• **Level 9:** Titan Ascendant: Month 27 = 810 workouts\n"
+                "• **Level 10:** Gladiator Maximus: Month 34 = 1000+ workouts"
+            ),
+            color=0xE67E22
+        )
+        embed.set_footer(text="Log your daily progress using /startworkout. Glory favors the relentless.")
+        
+        await interaction.followup.send(embed=embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(WorkoutCog(bot))
