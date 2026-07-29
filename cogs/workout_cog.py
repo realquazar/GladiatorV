@@ -337,7 +337,7 @@ class WorkoutSelectView(nextcord.ui.View):
         embed = nextcord.Embed(title=f"🔥 {self.stage} {path} Routine", color=0x9B59B6)
         embed.set_footer(text=f"Progress: {self.count} workouts completed | Stay disciplined.")
 
-        disclaimer_text = "⚠️ **Warning:** Leave the ego at the door. Strength comes from consistency and understanding your limits, do not ego lift or overexert yourself. Safety first warriors! 💪"
+        disclaimer_text = "⚠️ Warning: Leave the ego at the door. Strength comes from consistency and understanding your limits, do not ego lift or overexert yourself. Safety first warriors! 💪"
 
         if routine == "Rest Day":
             embed.description = "🛋️ **Rest Day!** Recovery is where the muscle grows. See you tomorrow!"
@@ -442,17 +442,17 @@ class WorkoutCog(commands.Cog):
             title="⚔️ The Path of Ascendance: Ranks & Milestones",
             description=(
                 "*Discipline is forged in repetition. Every session breaks a limit; every milestone claims a new rank.*\n"
-                "Here is the strict hierarchy of the arena—rise through the ranks or remain in the dust.\n\n"
-                "• **Level 1:** Novice / Beginner: Month 1 = 30 workouts\n"
-                "• **Level 2:** Bronze Legionnaire: Month 2 = 60 workouts\n"
-                "• **Level 3:** Iron Vanguard: Month 4 = 120 workouts\n"
-                "• **Level 4:** Steel Centurion: Month 5 = 150 workouts\n"
-                "• **Level 5:** Gilded Champion: Month 8 = 240 workouts\n"
-                "• **Level 6:** Arena Master: Month 11 = 330 workouts\n"
-                "• **Level 7:** Gold Gladiator: Month 13 = 390 workouts\n"
-                "• **Level 8:** Apex Centurion: Month 20 = 600 workouts\n"
-                "• **Level 9:** Titan Ascendant: Month 27 = 810 workouts\n"
-                "• **Level 10:** Gladiator Maximus: Month 34 = 1000+ workouts"
+                "Here is the strict hierarchy of the arena. Rise through the ranks or remain in the dust.\n\n"
+                "• **Level 1:** Novice / Beginner:\n Month 1 = 30 workouts\n\n"
+                "• **Level 2:** Bronze Legionnaire:\n Month 2 = 60 workouts\n\n"
+                "• **Level 3:** Iron Vanguard:\n Month 4 = 120 workouts\n\n"
+                "• **Level 4:** Steel Centurion:\n Month 5 = 150 workouts\n\n"
+                "• **Level 5:** Gilded Champion:\n Month 8 = 240 workouts\n\n"
+                "• **Level 6:** Arena Master:\n Month 11 = 330 workouts\n\n"
+                "• **Level 7:** Gold Gladiator:\n Month 13 = 390 workouts\n\n"
+                "• **Level 8:** Apex Centurion:\n Month 20 = 600 workouts\n\n"
+                "• **Level 9:** Titan Ascendant:\n Month 27 = 810 workouts\n\n"
+                "• **Level 10:** Gladiator Maximus:\n Month 34 = 1000+ workouts"
             ),
             color=0xE67E22
         )
