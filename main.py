@@ -18,11 +18,16 @@ intents = nextcord.Intents.default()
 intents.members = True  
 intents.message_content = True 
 
-activity = nextcord.Game(name="❄️ Winter is coming... /startworkout")
+# Set the activity and status to online
+activity = nextcord.Activity(
+    type=nextcord.ActivityType.playing,
+    name="🎉Our website is officially live! /help"
+)
 
 bot = commands.Bot(
     intents=intents, 
-    activity=activity
+    activity=activity,
+    status=nextcord.Status.online
 )
 
 # Single shared MongoDB client connection pool

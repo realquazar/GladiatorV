@@ -25,6 +25,9 @@ class HelpCog(commands.Cog):
                 "• **`/diet`** — Log and track your daily nutrition, calories, and macros to stay on target.\n\n"
                 "• **`/hype`** — Play hype workout music to get locked in for your session.\n\n"
                 "───\n\n"
+                "🌐 **WEB DASHBOARD**\n"
+                "Prefer a visual interface? Sign in with Discord on the official web dashboard to seamlessly view your stats, customize your schedules, and manage your workout logs in real time!\n\n"
+                "───\n\n"
                 "⚙️ **PROGRESSIVE DIFFICULTY**\n"
                 "workouts and exercises dynamically scale—the more you complete them and progress, the harder they get to keep challenging your limits!\n\n"
                 "💪 **Grow Stronger. Keep pushing forward.** 🛡️"
@@ -32,9 +35,16 @@ class HelpCog(commands.Cog):
             color=nextcord.Color.dark_gray()
         )
 
-        # Interactive Link Buttons for Top.gg & Support
+        # Interactive Link Buttons for Dashboard, Top.gg, and Support Server
         view = nextcord.ui.View()
         
+        dashboard_button = nextcord.ui.Button(
+            label="Open Dashboard",
+            url="https://gladiator-v.up.railway.app/",
+            style=nextcord.ButtonStyle.link,
+            emoji="🌐"
+        )
+
         topgg_button = nextcord.ui.Button(
             label="Vote on Top.gg",
             url="https://top.gg/bot/1016363661444534452",
@@ -49,13 +59,18 @@ class HelpCog(commands.Cog):
             emoji="💬"
         )
 
+        view.add_item(dashboard_button)
         view.add_item(topgg_button)
         view.add_item(support_button)
 
-        if interaction.response.is_done():
+        # Force try/except fallback to guarantee it sends regardless of prior acknowledgment state
+        try:
+            if not interaction.response.is_done():
+                await interaction.response.send_message(embed=embed, view=view)
+            else:
+                await interaction.followup.send(embed=embed, view=view)
+        except Exception:
             await interaction.followup.send(embed=embed, view=view)
-        else:
-            await interaction.response.send_message(embed=embed, view=view)
 
 def setup(bot):
     bot.add_cog(HelpCog(bot))
