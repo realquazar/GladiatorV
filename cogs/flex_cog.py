@@ -4,21 +4,11 @@ from nextcord.ui import View, Modal, TextInput
 import motor.motor_asyncio
 import os
 import re
-import io
-import asyncio
 from datetime import datetime
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 
 
 def normalize_name(name):
     return re.sub(r'[^a-zA-Z0-9]', '', str(name)).lower()
-
-
-def extract_number(stat_str):
-    match = re.search(r"(\d+\.?\d*)", str(stat_str))
-    return float(match.group(1)) if match else 0.0
 
 
 def get_date_string():
@@ -40,8 +30,7 @@ def is_archived_entry(f):
 
 
 def get_clean_exercise_name(f):
-    exercise = str(f.get("exercise", "")).replace("(archived)", "").strip()
-    return exercise
+    return str(f.get("exercise", "")).replace("(archived)", "").strip()
 
 
 class FlexModal(Modal):
@@ -59,7 +48,6 @@ class FlexModal(Modal):
         norm_name = normalize_name(raw_name)
         new_stat = self.stat.value.strip()
         fancy_date = get_date_string()
-        graph_label = datetime.now().strftime("%b %d")
         user_id = str(interaction.user.id)
 
         user_doc = await self.cog.collection.find_one({"_id": user_id})
@@ -74,7 +62,6 @@ class FlexModal(Modal):
             "archived": False,
             "stat": new_stat,
             "timestamp": fancy_date,
-            "graph_date": graph_label,
             "raw_ts": datetime.now().isoformat()
         }
 
@@ -173,79 +160,6 @@ class DeleteModal(Modal):
                 "❌ Error deleting item.",
                 ephemeral=True
             )
-
-
-class GraphSelect(nextcord.ui.Select):
-    def __init__(self, data, cog):
-        unique_exercises = []
-        seen = set()
-
-        for f in data:
-            clean = get_clean_exercise_name(f)
-            norm = normalize_name(clean)
-            if norm and norm not in seen:
-                unique_exercises.append(clean)
-                seen.add(norm)
-
-        options = [
-            nextcord.SelectOption(label=ex[:100], value=normalize_name(ex))
-            for ex in unique_exercises[:25]
-        ]
-
-        if not options:
-            options = [nextcord.SelectOption(label="No data", value="none")]
-
-        super().__init__(placeholder="Choose an exercise to graph...", options=options)
-        self.data = data
-        self.cog = cog
-
-    async def callback(self, interaction: nextcord.Interaction):
-        target_norm = self.values[0]
-
-        if target_norm == "none":
-            return await interaction.response.send_message(
-                "❌ No flex data available to graph.",
-                ephemeral=True
-            )
-
-        history = [
-            f for f in self.data
-            if normalize_name(get_clean_exercise_name(f)) == target_norm
-        ]
-
-        history.sort(key=lambda x: x.get("raw_ts", ""))
-
-        if len(history) < 1:
-            return await interaction.response.send_message(
-                "❌ No matching flex entries found.",
-                ephemeral=True
-            )
-
-        await interaction.response.defer()
-
-        def render_chart():
-            plt.close("all")
-            fig, ax = plt.subplots(figsize=(8, 4))
-
-            stats = [extract_number(f.get("stat", "0")) for f in history]
-            dates = [f.get("graph_date", f.get("timestamp", "N/A")) for f in history]
-
-            ax.plot(dates, stats, marker="o", color="#8411FF", linewidth=2)
-            ax.set_title(f"Progress: {get_clean_exercise_name(history[-1])}")
-            ax.set_ylabel("Result")
-            ax.set_xlabel("Date")
-            ax.grid(True, linestyle="--", alpha=0.5)
-            plt.xticks(rotation=25)
-            plt.tight_layout()
-
-            buf = io.BytesIO()
-            plt.savefig(buf, format="png")
-            buf.seek(0)
-            plt.close(fig)
-            return buf
-
-        buf = await asyncio.to_thread(render_chart)
-        await interaction.followup.send(file=nextcord.File(fp=buf, filename="progress.png"))
 
 
 class FlexPaginationView(View):
@@ -349,18 +263,6 @@ class FlexPaginationView(View):
             view=new_view,
             file=nextcord.File(fp="./assets/knight.png", filename="knight.png")
         )
-
-    @nextcord.ui.button(label="Graph", emoji="📈", style=nextcord.ButtonStyle.secondary, row=1)
-    async def graph(self, btn, req):
-        await req.response.defer()
-        fresh_data = await self.get_fresh_data()
-
-        if not fresh_data:
-            return await req.followup.send("❌ No data!", ephemeral=True)
-
-        v = View(timeout=60)
-        v.add_item(GraphSelect(fresh_data, self.cog))
-        await req.followup.send("📊 Select an exercise:", view=v)
 
 
 class FlexCog(commands.Cog):
