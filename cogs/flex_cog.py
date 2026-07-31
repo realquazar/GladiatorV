@@ -205,21 +205,32 @@ class FlexPaginationView(View):
         if req.user.id != self.owner_id: return await req.response.send_message("❌ No permission", ephemeral=True)
         await req.response.send_modal(DeleteModal(self.cog, self))
 
+    async def get_fresh_data(self):
+        try:
+            user_data = await self.cog.collection.find_one({"_id": str(self.owner_id)})
+            return user_data.get("flexes", []) if user_data else []
+        except Exception as e:
+            print(f"MongoDB error refreshing flex data: {e}")
+            return self.all_raw_data
+
     @nextcord.ui.button(label="Menu", style=nextcord.ButtonStyle.secondary, row=1)
     async def menu(self, btn, req):
-        new_view = FlexPaginationView(self.owner_id, self.user_name, self.all_raw_data, self.cog, False)
+        fresh_data = await self.get_fresh_data()
+        new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, False)
         await req.response.edit_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
 
     @nextcord.ui.button(label="Archived", style=nextcord.ButtonStyle.secondary, row=1)
     async def toggle_archived(self, btn, req):
-        new_view = FlexPaginationView(self.owner_id, self.user_name, self.all_raw_data, self.cog, True)
+        fresh_data = await self.get_fresh_data()
+        new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, True)
         await req.response.edit_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
 
     @nextcord.ui.button(label="Graph", emoji="📈", style=nextcord.ButtonStyle.secondary, row=1)
     async def graph(self, btn, req):
-        if not self.all_raw_data: return await req.response.send_message("❌ No data!", ephemeral=True)
+        fresh_data = await self.get_fresh_data()
+        if not fresh_data: return await req.response.send_message("❌ No data!", ephemeral=True)
         v = View(timeout=60)
-        v.add_item(GraphSelect(self.all_raw_data, self.cog))
+        v.add_item(GraphSelect(fresh_data, self.cog))
         await req.response.send_message("📊 Select an exercise:", view=v)
         
 class FlexCog(commands.Cog):
