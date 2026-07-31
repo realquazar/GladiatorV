@@ -21,7 +21,7 @@ intents.message_content = True
 # Set the activity and status to online
 activity = nextcord.Activity(
     type=nextcord.ActivityType.playing,
-    name="🎉Our website is officially live! /help"
+    name="."
 )
 
 bot = commands.Bot(
