@@ -5,6 +5,7 @@ import motor.motor_asyncio
 import os
 import re
 import io
+import asyncio
 from datetime import datetime
 import matplotlib.pyplot as plt
 
@@ -137,29 +138,39 @@ class GraphSelect(nextcord.ui.Select):
         self.data, self.cog = data, cog        
 
     async def callback(self, interaction: nextcord.Interaction):        
-        plt.close('all') 
         target_norm = self.values[0]
         history = [f for f in self.data if normalize_name(f['exercise'].replace('(archived)', '').strip()) == target_norm]
         if len(history) < 2: return await interaction.response.send_message("📈 Add more entries!", ephemeral=True)
-        
+
+        # Ack immediately so Discord doesn't time this interaction out while we render.
+        await interaction.response.defer()
+
         history.sort(key=lambda x: x.get('raw_ts', ''))
-        import matplotlib
-        matplotlib.use('Agg') 
-        fig, ax = plt.subplots(figsize=(8, 4))
-        stats = [extract_number(f['stat']) for f in history]
-        dates = [f.get('graph_date', f.get('timestamp', 'N/A')) for f in history]
-        ax.plot(dates, stats, marker='o', color="#8411FF", linewidth=2)
-        ax.set_title(f"Progress: {history[-1]['exercise'].replace('(archived)', '').strip()}")
-        ax.set_ylabel("Result")
-        ax.set_xlabel("Date")
-        ax.grid(True, linestyle='--', alpha=0.5)
-        plt.xticks(rotation=25)
-        plt.tight_layout()
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png')
-        buf.seek(0)
-        plt.close(fig)
-        await interaction.response.send_message(file=nextcord.File(fp=buf, filename="progress.png"))
+
+        def render_chart():
+            # Runs in a worker thread so the shared event loop (and every other
+            # user's interactions) never gets blocked by matplotlib's blocking calls.
+            plt.close('all')
+            import matplotlib
+            matplotlib.use('Agg')
+            fig, ax = plt.subplots(figsize=(8, 4))
+            stats = [extract_number(f['stat']) for f in history]
+            dates = [f.get('graph_date', f.get('timestamp', 'N/A')) for f in history]
+            ax.plot(dates, stats, marker='o', color="#8411FF", linewidth=2)
+            ax.set_title(f"Progress: {history[-1]['exercise'].replace('(archived)', '').strip()}")
+            ax.set_ylabel("Result")
+            ax.set_xlabel("Date")
+            ax.grid(True, linestyle='--', alpha=0.5)
+            plt.xticks(rotation=25)
+            plt.tight_layout()
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            buf.seek(0)
+            plt.close(fig)
+            return buf
+
+        buf = await asyncio.to_thread(render_chart)
+        await interaction.followup.send(file=nextcord.File(fp=buf, filename="progress.png"))
 
 class FlexPaginationView(View):
     def __init__(self, owner_id, user_name, data, cog, show_archived=False):
@@ -215,23 +226,26 @@ class FlexPaginationView(View):
 
     @nextcord.ui.button(label="Menu", style=nextcord.ButtonStyle.secondary, row=1)
     async def menu(self, btn, req):
+        await req.response.defer()
         fresh_data = await self.get_fresh_data()
         new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, False)
-        await req.response.edit_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
+        await req.edit_original_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
 
     @nextcord.ui.button(label="Archived", style=nextcord.ButtonStyle.secondary, row=1)
     async def toggle_archived(self, btn, req):
+        await req.response.defer()
         fresh_data = await self.get_fresh_data()
         new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, True)
-        await req.response.edit_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
+        await req.edit_original_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
 
     @nextcord.ui.button(label="Graph", emoji="📈", style=nextcord.ButtonStyle.secondary, row=1)
     async def graph(self, btn, req):
+        await req.response.defer()
         fresh_data = await self.get_fresh_data()
-        if not fresh_data: return await req.response.send_message("❌ No data!", ephemeral=True)
+        if not fresh_data: return await req.followup.send("❌ No data!", ephemeral=True)
         v = View(timeout=60)
         v.add_item(GraphSelect(fresh_data, self.cog))
-        await req.response.send_message("📊 Select an exercise:", view=v)
+        await req.followup.send("📊 Select an exercise:", view=v)
         
 class FlexCog(commands.Cog):
     def __init__(self, bot):
