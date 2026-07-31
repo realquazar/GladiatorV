@@ -81,7 +81,7 @@ class WorkoutReminder(commands.Cog):
         await interaction.response.defer(ephemeral=True)
 
         try:
-            existing_reminder = await self.reminders.find_one({"user_id": interaction.user.id})
+            existing_reminder = await self.reminders.find_one({"user_id": str(interaction.user.id)})
         except Exception as db_err:
             print(f"MongoDB error: {db_err}")
             await interaction.followup.send("⚠️ Database error occurred. Please try again.", ephemeral=True)
@@ -129,7 +129,7 @@ class WorkoutReminder(commands.Cog):
         utc_ping_dt = local_ping_dt.astimezone(datetime.timezone.utc)
 
         reminder_data = {
-            "user_id": interaction.user.id,
+            "user_id": str(interaction.user.id),
             "guild_id": interaction.guild_id,
             "channel_id": target_channel.id,
             "timezone": timezone_str,
@@ -144,7 +144,7 @@ class WorkoutReminder(commands.Cog):
         }
 
         await self.reminders.update_one(
-            {"user_id": interaction.user.id},
+            {"user_id": str(interaction.user.id)},
             {"$set": reminder_data},
             upsert=True
         )
@@ -199,7 +199,7 @@ class WorkoutReminder(commands.Cog):
             time_str = doc["time_range_text"]
             tz_str = doc.get("timezone", "IST")
             
-            view = ReminderPingView(self.reminders, user_id)
+            view = ReminderPingView(self.reminders, int(user_id))
             try:
                 await channel.send(
                     f"🚨 <@{user_id}> **WORKOUT REMINDER!** 🚨\n"
@@ -237,7 +237,7 @@ class ManageExistingReminderView(nextcord.ui.View):
             return await interaction.response.send_message("This menu isn't for you!", ephemeral=True)
 
         await interaction.response.defer(ephemeral=True)
-        await self.cog.reminders.delete_one({"user_id": self.user_id})
+        await self.cog.reminders.delete_one({"user_id": str(self.user_id)})
         await interaction.followup.send("🗑️ **Your workout reminder has been deleted successfully.**", ephemeral=True)
 
 
@@ -253,7 +253,7 @@ class ReminderPingView(nextcord.ui.View):
             return await interaction.response.send_message("Only the scheduled athlete can delete this reminder!", ephemeral=True)
 
         await interaction.response.defer(ephemeral=True)
-        await self.reminders_collection.delete_one({"user_id": self.target_user_id})
+        await self.reminders_collection.delete_one({"user_id": str(self.target_user_id)})
         await interaction.followup.send("🗑️ **Reminder deleted.** You will no longer receive pings.", ephemeral=True)
 
     @nextcord.ui.button(label="How to Update Time", style=nextcord.ButtonStyle.secondary)

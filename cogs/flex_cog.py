@@ -40,7 +40,7 @@ class FlexModal(Modal):
         new_stat = self.stat.value.strip()
         fancy_date = get_date_string()
         graph_label = datetime.now().strftime("%b %d")
-        user_id = interaction.user.id        
+        user_id = str(interaction.user.id)        
         user_doc = await self.cog.collection.find_one({"_id": user_id})
         flexes = user_doc.get("flexes", []) if user_doc else []
             
@@ -86,7 +86,7 @@ class DeleteModal(Modal):
         val = self.number.value.strip().lower()
                 
         if val == "all":
-            await self.cog.clear_all_flexes(interaction.user.id)
+            await self.cog.clear_all_flexes(str(interaction.user.id))
             self.view_ref.all_raw_data = []
             self.view_ref.data = []
             self.view_ref.update_pages()
@@ -107,8 +107,8 @@ class DeleteModal(Modal):
             return await interaction.response.send_message("❌ Invalid number.", ephemeral=True)
         
         target_to_delete = self.view_ref.data[display_idx]
-        if await self.cog.delete_specific_flex(interaction.user.id, target_to_delete):
-            user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
+        if await self.cog.delete_specific_flex(str(interaction.user.id), target_to_delete):
+            user_data = await self.cog.collection.find_one({"_id": str(interaction.user.id)})
             new_raw_data = user_data.get("flexes", []) if user_data else []
             
             self.view_ref.all_raw_data = new_raw_data
@@ -255,7 +255,7 @@ class FlexCog(commands.Cog):
             except Exception:
                 pass
         try:
-            user_data = await self.collection.find_one({"_id": interaction.user.id})
+            user_data = await self.collection.find_one({"_id": str(interaction.user.id)})
             data = user_data.get("flexes", []) if user_data else []
         except Exception as e:
             print(f"MongoDB error in /flex: {e}")

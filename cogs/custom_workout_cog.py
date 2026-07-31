@@ -25,11 +25,11 @@ class CreateScheduleModal(Modal):
         
         try:
             await self.cog.collection.update_one(
-                {"_id": interaction.user.id},
+                {"_id": str(interaction.user.id)},
                 {"$push": {"schedules": new_schedule}},
                 upsert=True
             )
-            user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
+            user_data = await self.cog.collection.find_one({"_id": str(interaction.user.id)})
             current_schedules = user_data.get("schedules", []) if user_data else []
         except Exception as e:
             print(f"MongoDB error in CreateScheduleModal: {e}")
@@ -49,7 +49,7 @@ class AddExerciseModal(Modal):
 
     async def callback(self, interaction: nextcord.Interaction):
         try:
-            user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
+            user_data = await self.cog.collection.find_one({"_id": str(interaction.user.id)})
             schedules = user_data.get("schedules", []) if user_data else []
             
             if 0 <= self.sched_idx < len(schedules):
@@ -59,7 +59,7 @@ class AddExerciseModal(Modal):
                 schedules[self.sched_idx]["days"][self.day].append(entry)
                 
                 await self.cog.collection.update_one(
-                    {"_id": interaction.user.id},
+                    {"_id": str(interaction.user.id)},
                     {"$set": {"schedules": schedules}}
                 )
         except Exception as e:
@@ -150,7 +150,7 @@ class WorkoutView(View):
 
     async def refresh_data(self, interaction: nextcord.Interaction):
         try:
-            user_data = await self.cog.collection.find_one({"_id": interaction.user.id})
+            user_data = await self.cog.collection.find_one({"_id": str(interaction.user.id)})
             self.schedules = user_data.get("schedules", []) if user_data else []
         except Exception as e:
             print(f"MongoDB error in refresh_data: {e}")
@@ -185,7 +185,7 @@ class WorkoutView(View):
 
     async def clear_all_data(self, interaction: nextcord.Interaction):
         try:
-            await self.cog.collection.update_one({"_id": interaction.user.id}, {"$set": {"schedules": []}})
+            await self.cog.collection.update_one({"_id": str(interaction.user.id)}, {"$set": {"schedules": []}})
         except Exception as e:
             print(f"MongoDB error in clear_all_data: {e}")
         self.schedules = []
@@ -249,7 +249,7 @@ class CustomWorkoutCog(commands.Cog):
                 pass
 
         try:
-            user_data = await self.collection.find_one({"_id": interaction.user.id})
+            user_data = await self.collection.find_one({"_id": str(interaction.user.id)})
             schedules = user_data.get("schedules", []) if user_data else []
         except Exception as e:
             print(f"MongoDB error in /myworkout: {e}")
