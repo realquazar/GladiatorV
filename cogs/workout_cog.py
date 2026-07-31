@@ -379,6 +379,42 @@ class ScheduleSelectView(nextcord.ui.View):
         await itx.response.edit_message(content=None, embed=pag_view.create_embed(), view=pag_view)
 
 
+class ConfirmResetView(nextcord.ui.View):
+    def __init__(self, cog, owner_id):
+        super().__init__(timeout=60)
+        self.cog = cog
+        self.owner_id = owner_id
+
+    @nextcord.ui.button(label="Yes, Reset My Progress", style=nextcord.ButtonStyle.danger, emoji="⚠️", custom_id="confirm_reset_btn")
+    async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user.id != self.owner_id:
+            return await interaction.response.send_message("This confirmation isn't for you!", ephemeral=True)
+
+        await self.cog.users.update_one(
+            {"_id": str(self.owner_id)},
+            {"$set": {"workout_count": 0}},
+            upsert=True
+        )
+
+        for child in self.children:
+            child.disabled = True
+
+        await interaction.response.edit_message(
+            content="✅ **Your workout count has been reset to 0.** You're back at **Level 1: Novice / Beginner** — time to start climbing again! 💪",
+            view=self
+        )
+
+    @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.secondary, custom_id="cancel_reset_btn")
+    async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user.id != self.owner_id:
+            return await interaction.response.send_message("This confirmation isn't for you!", ephemeral=True)
+
+        for child in self.children:
+            child.disabled = True
+
+        await interaction.response.edit_message(content="❌ Reset cancelled. Your progress is safe.", view=self)
+
+
 class WorkoutCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -459,6 +495,23 @@ class WorkoutCog(commands.Cog):
         embed.set_footer(text="Log your daily progress using /startworkout. Glory favors the relentless.")
         
         await interaction.followup.send(embed=embed, ephemeral=True)
+
+    @nextcord.slash_command(name="resetworkout", description="Reset your workout count and rank back to zero")
+    async def reset_workout(self, interaction: nextcord.Interaction):
+        if not interaction.response.is_done():
+            try:
+                await interaction.response.defer(ephemeral=True)
+            except Exception:
+                pass
+
+        view = ConfirmResetView(self, interaction.user.id)
+        await interaction.followup.send(
+            "⚠️ **Are you sure you want to reset your progress?**\n\n"
+            "All your workout counts will be lost, and your current rank will be gone — you'll be reset all the way back to **Level 1: Novice / Beginner**.\n\n"
+            "**This cannot be undone.**",
+            view=view,
+            ephemeral=True
+        )
 
 def setup(bot):
     bot.add_cog(WorkoutCog(bot))
