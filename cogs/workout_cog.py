@@ -291,7 +291,7 @@ class WorkoutFinishView(nextcord.ui.View):
         cog = interaction.client.get_cog("WorkoutCog")
         if cog:
             await cog.users.update_one(
-                {"_id": interaction.user.id}, 
+                {"_id": str(interaction.user.id)}, 
                 {"$inc": {"workout_count": 1}}, 
                 upsert=True
             )
@@ -390,7 +390,7 @@ class WorkoutCog(commands.Cog):
         self.users = self.db["user_stats"]
 
     async def get_user_stage(self, user_id):
-        user = await self.users.find_one({"_id": user_id})
+        user = await self.users.find_one({"_id": str(user_id)})
         if not user: return "Novice Initiate", 0
         count = user.get("workout_count", 0)
         
