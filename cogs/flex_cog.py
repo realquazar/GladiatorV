@@ -205,7 +205,14 @@ class FlexCog(commands.Cog):
         user_data = await self.collection.find_one({"_id": user_id})
         if user_data and "flexes" in user_data:
             flexes = user_data["flexes"]
-            new_flexes = [f for f in flexes if not (f['exercise'] == target_item['exercise'] and f.get('raw_ts') == target_item.get('raw_ts'))]
+            target_norm = normalize_name(target_item['exercise'].replace('(archived)', '').strip())
+            # Cascade delete: remove every entry (active AND archived) sharing this
+            # exercise name, so deleting "Lift" also clears out its archived history
+            # instead of leaving orphaned duplicates behind.
+            new_flexes = [
+                f for f in flexes
+                if normalize_name(f['exercise'].replace('(archived)', '').strip()) != target_norm
+            ]
             if len(new_flexes) < len(flexes):
                 await self.collection.update_one({"_id": user_id}, {"$set": {"flexes": new_flexes}})
                 return True
