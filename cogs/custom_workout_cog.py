@@ -141,6 +141,15 @@ class WorkoutView(View):
         clear_btn.callback = self.clear_all_data
         self.add_item(clear_btn)
 
+        dashboard_btn = Button(
+            label="Dashboard",
+            style=nextcord.ButtonStyle.link,
+            url="https://gladiator-v.up.railway.app/",
+            emoji="🌐",
+            row=3
+        )
+        self.add_item(dashboard_btn)
+
     def get_file(self):
         paths = ["assets/armor.jpg", os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "armor.jpg")]
         for p in paths:
@@ -209,7 +218,9 @@ class WorkoutView(View):
         )
         if os.path.exists("assets/armor.jpg") or os.path.exists(os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "armor.jpg")):
             embed.set_thumbnail(url="attachment://armor.jpg")
-        
+
+        embed.add_field(name="💡 Tip", value="If you want better control over this command, use our dashboard!", inline=False)
+
         if not self.schedules:
             embed.description = "❌ **No schedules found.**\n\nClick the **New Schedule** button below to create your first plan."
             return embed

@@ -16,6 +16,10 @@ TIMEZONE_OFFSETS = {
     "AEST": datetime.timedelta(hours=10)
 }
 
+# Training days per the workout schedule. Monday=0 ... Sunday=6.
+# Wednesday and Sunday are rest days, so no reminder gets sent on those days.
+ALLOWED_REMINDER_WEEKDAYS = {0, 1, 3, 4, 5}
+
 def parse_time_input(time_str: str):
     """
     Parses flexible human time inputs like '3:11 PM', '3:11PM', '03:11 PM', '3:11 pm', '15:11', '3:11 AM', '6:00 AM to 7:00 AM'
@@ -170,7 +174,8 @@ class WorkoutReminder(commands.Cog):
         })
 
         async for doc in cursor:
-            await self._send_reminder_ping(doc)
+            if self.is_training_day(doc, now_utc):
+                await self._send_reminder_ping(doc)
 
         # Fallback for legacy documents without utc_ping_hour
         now_local = datetime.datetime.now()
@@ -184,7 +189,13 @@ class WorkoutReminder(commands.Cog):
         })
 
         async for doc in legacy_cursor:
-            await self._send_reminder_ping(doc)
+            if self.is_training_day(doc, now_utc):
+                await self._send_reminder_ping(doc)
+
+    def is_training_day(self, doc, now_utc):
+        tz_offset = TIMEZONE_OFFSETS.get(doc.get("timezone", "IST"), TIMEZONE_OFFSETS["IST"])
+        local_now = now_utc + tz_offset
+        return local_now.weekday() in ALLOWED_REMINDER_WEEKDAYS
 
     async def _send_reminder_ping(self, doc):
         channel = self.bot.get_channel(doc["channel_id"])
@@ -196,14 +207,12 @@ class WorkoutReminder(commands.Cog):
 
         if channel:
             user_id = doc["user_id"]
-            time_str = doc["time_range_text"]
-            tz_str = doc.get("timezone", "IST")
-            
+
             view = ReminderPingView(self.reminders, int(user_id))
             try:
                 await channel.send(
                     f"🚨 <@{user_id}> **WORKOUT REMINDER!** 🚨\n"
-                    f"Your workout slot (`{time_str}` {tz_str}) starts in **5 minutes**! Time to suit up and gear up! ⚔️",
+                    f"Your workout slot begins in 5 minutes! Time to gear up ⚔️",
                     view=view
                 )
             except Exception as e:

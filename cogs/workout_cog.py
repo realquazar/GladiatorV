@@ -400,7 +400,7 @@ class ConfirmResetView(nextcord.ui.View):
             child.disabled = True
 
         await interaction.response.edit_message(
-            content="✅ **Your workout count has been reset to 0.** You're back at **Level 1: Novice / Beginner** — time to start climbing again! 💪",
+            content="✅ **Your workout count has been reset to 0.** You're back at **Level 1: Novice / Beginner**. Time to start climbing again! 💪",
             view=self
         )
 
@@ -507,7 +507,7 @@ class WorkoutCog(commands.Cog):
         view = ConfirmResetView(self, interaction.user.id)
         await interaction.followup.send(
             "⚠️ **Are you sure you want to reset your progress?**\n\n"
-            "All your workout counts will be lost, and your current rank will be gone — you'll be reset all the way back to **Level 1: Novice / Beginner**.\n\n"
+            "All your workout counts will be lost, and your current rank will be gone. You'll be reset all the way back to **Level 1: Novice / Beginner**.\n\n"
             "**This cannot be undone.**",
             view=view,
             ephemeral=True
