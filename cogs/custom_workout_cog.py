@@ -4,6 +4,8 @@ from nextcord.ui import View, Modal, TextInput, Select, Button
 import motor.motor_asyncio
 import os
 
+TIP_MESSAGE = "💡 **Tip:** If you want better control over this command, use our dashboard!"
+
 class CreateScheduleModal(Modal):
     def __init__(self, cog, view_ref):
         super().__init__("Forge New Schedule")
@@ -166,7 +168,7 @@ class WorkoutView(View):
             
         self.setup_selectors()
         
-        kwargs = {"embed": self.create_embed(), "view": self}
+        kwargs = {"content": TIP_MESSAGE, "embed": self.create_embed(), "view": self}
         file = self.get_file()
         if file:
             kwargs["file"] = file
@@ -201,7 +203,7 @@ class WorkoutView(View):
         self.current_sched_idx = 0
         self.setup_selectors()
         
-        kwargs = {"content": "🧹 **All workout schedules have been cleared.**", "embed": self.create_embed(), "view": self}
+        kwargs = {"content": f"🧹 **All workout schedules have been cleared.**\n{TIP_MESSAGE}", "embed": self.create_embed(), "view": self}
         file = self.get_file()
         if file:
             kwargs["file"] = file
@@ -218,8 +220,6 @@ class WorkoutView(View):
         )
         if os.path.exists("assets/armor.jpg") or os.path.exists(os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "armor.jpg")):
             embed.set_thumbnail(url="attachment://armor.jpg")
-
-        embed.add_field(name="💡 Tip", value="If you want better control over this command, use our dashboard!", inline=False)
 
         if not self.schedules:
             embed.description = "❌ **No schedules found.**\n\nClick the **New Schedule** button below to create your first plan."
@@ -269,6 +269,7 @@ class CustomWorkoutCog(commands.Cog):
         view = WorkoutView(interaction.user.display_name, schedules, self)
         
         kwargs = {
+            "content": TIP_MESSAGE,
             "embed": view.create_embed(), 
             "view": view,
             "ephemeral": True
