@@ -15,13 +15,11 @@ if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
 load_dotenv()
 
 intents = nextcord.Intents.default()
-intents.members = True  
-intents.message_content = True 
 
 # Set the activity and status to online
 activity = nextcord.Activity(
     type=nextcord.ActivityType.playing,    
-    name="Failing is part of the process /startworkout"
+    name="Failing is part of the process /startworkout"    
 )
 
 bot = commands.Bot(
