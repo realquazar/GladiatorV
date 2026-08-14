@@ -16,9 +16,40 @@ TIMEZONE_OFFSETS = {
     "AEST": datetime.timedelta(hours=10)
 }
 
-# Training days per the workout schedule. Monday=0 ... Sunday=6.
-# Wednesday and Sunday are rest days, so no reminder gets sent on those days.
-ALLOWED_REMINDER_WEEKDAYS = {0, 1, 3, 4, 5}
+# Default training days if the user doesn't specify their own. Monday=0 ... Sunday=6.
+DEFAULT_TRAINING_DAYS = [0, 1, 3, 4, 5]  # Mon, Tue, Thu, Fri, Sat
+
+DAY_NAME_TO_INT = {
+    "mon": 0, "monday": 0,
+    "tue": 1, "tues": 1, "tuesday": 1,
+    "wed": 2, "weds": 2, "wednesday": 2,
+    "thu": 3, "thur": 3, "thurs": 3, "thursday": 3,
+    "fri": 4, "friday": 4,
+    "sat": 5, "saturday": 5,
+    "sun": 6, "sunday": 6,
+}
+
+DAY_DISPLAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
+def parse_days_input(days_str: str):
+    """
+    Parses a free-text list of days like 'Mon, Wed, Fri' or 'monday tuesday'.
+    Returns a sorted list of unique weekday ints (0=Mon..6=Sun).
+    Returns an empty list if nothing valid could be parsed.
+    """
+    tokens = re.split(r"[,\s/]+", days_str.strip().lower())
+    result = set()
+    for tok in tokens:
+        tok = tok.strip(".")
+        if tok in DAY_NAME_TO_INT:
+            result.add(DAY_NAME_TO_INT[tok])
+    return sorted(result)
+
+
+def format_days(day_ints):
+    return ", ".join(DAY_DISPLAY_NAMES[d] for d in sorted(day_ints))
+
 
 def parse_time_input(time_str: str):
     """
@@ -80,7 +111,12 @@ class WorkoutReminder(commands.Cog):
             },
             default="UTC"
         ),
-        channel: nextcord.TextChannel = nextcord.SlashOption(description="Channel to receive the reminder ping", required=False)
+        channel: nextcord.TextChannel = nextcord.SlashOption(description="Channel to receive the reminder ping", required=False),
+        days: str = nextcord.SlashOption(
+            description="Days to be pinged, e.g. 'Mon, Wed, Fri'. Defaults to Mon, Tue, Thu, Fri, Sat.",
+            required=False,
+            default=None
+        )
     ):
         await interaction.response.defer(ephemeral=True)
 
@@ -94,7 +130,7 @@ class WorkoutReminder(commands.Cog):
         if existing_reminder:
             existing_time = existing_reminder.get("time_range_text", "Unknown Time")
             
-            view = ManageExistingReminderView(self, interaction.user.id, time, timezone_choice, channel)
+            view = ManageExistingReminderView(self, interaction.user.id, time, timezone_choice, channel, days)
             await interaction.followup.send(
                 f"❌ **You can't set a new time directly because it is already set at `{existing_time}`!**\n\n"
                 f"Would you like to **Update** your current schedule to `{time}` (`{timezone_choice}`) or **Delete** your existing reminder entirely?",
@@ -103,7 +139,7 @@ class WorkoutReminder(commands.Cog):
             )
             return
 
-        await self._process_reminder_setup(interaction, time, timezone_choice, channel)
+        await self._process_reminder_setup(interaction, time, timezone_choice, channel, days_str=days)
 
     async def _process_reminder_setup(
         self, 
@@ -111,7 +147,8 @@ class WorkoutReminder(commands.Cog):
         time: str, 
         timezone_str: str = "UTC",
         channel: nextcord.TextChannel = None, 
-        is_update: bool = False
+        is_update: bool = False,
+        days_str: str = None
     ):
         target_channel = channel or interaction.channel
 
@@ -122,6 +159,17 @@ class WorkoutReminder(commands.Cog):
                 ephemeral=True
             )
             return
+
+        if days_str and days_str.strip():
+            training_days = parse_days_input(days_str)
+            if not training_days:
+                await interaction.followup.send(
+                    "⚠️ **Invalid days!** Use day names or short forms separated by commas, e.g. `Mon, Wed, Fri`.",
+                    ephemeral=True
+                )
+                return
+        else:
+            training_days = DEFAULT_TRAINING_DAYS.copy()
 
         # Calculate exact ping time (Workout Time minus 5 minutes) in user's local timezone
         workout_dt_naive = datetime.datetime.combine(datetime.date.today(), parsed_time)
@@ -144,6 +192,7 @@ class WorkoutReminder(commands.Cog):
             "start_hour": parsed_time.hour,
             "start_minute": parsed_time.minute,
             "time_range_text": time,
+            "training_days": training_days,
             "enabled": True
         }
 
@@ -156,7 +205,7 @@ class WorkoutReminder(commands.Cog):
         status_msg = "Updated!" if is_update else "Set!"
         start_time_formatted = parsed_time.strftime("%I:%M %p").lstrip("0")
         await interaction.followup.send(
-            f"✅ **Reminder {status_msg}** I will ping you in {target_channel.mention} 5 minutes before `{start_time_formatted}` ({timezone_str}) every day. Get ready to train! 🥊",
+            f"✅ **Reminder {status_msg}** I will ping you in {target_channel.mention} 5 minutes before `{start_time_formatted}` ({timezone_str}) on **{format_days(training_days)}**. Get ready to train! 🥊",
             ephemeral=True
         )
 
@@ -195,7 +244,8 @@ class WorkoutReminder(commands.Cog):
     def is_training_day(self, doc, now_utc):
         tz_offset = TIMEZONE_OFFSETS.get(doc.get("timezone", "UTC"), TIMEZONE_OFFSETS["UTC"])
         local_now = now_utc + tz_offset
-        return local_now.weekday() in ALLOWED_REMINDER_WEEKDAYS
+        training_days = doc.get("training_days", DEFAULT_TRAINING_DAYS)
+        return local_now.weekday() in training_days
 
     async def _send_reminder_ping(self, doc):
         channel = self.bot.get_channel(doc["channel_id"])
@@ -224,13 +274,14 @@ class WorkoutReminder(commands.Cog):
 
 
 class ManageExistingReminderView(nextcord.ui.View):
-    def __init__(self, cog, user_id, new_time, new_timezone, new_channel):
+    def __init__(self, cog, user_id, new_time, new_timezone, new_channel, new_days=None):
         super().__init__(timeout=60)
         self.cog = cog
         self.user_id = user_id
         self.new_time = new_time
         self.new_timezone = new_timezone
         self.new_channel = new_channel
+        self.new_days = new_days
 
     @nextcord.ui.button(label="Update Time", style=nextcord.ButtonStyle.primary)
     async def update_time(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -238,7 +289,7 @@ class ManageExistingReminderView(nextcord.ui.View):
             return await interaction.response.send_message("This menu isn't for you!", ephemeral=True)
         
         await interaction.response.defer(ephemeral=True)
-        await self.cog._process_reminder_setup(interaction, self.new_time, self.new_timezone, self.new_channel, is_update=True)
+        await self.cog._process_reminder_setup(interaction, self.new_time, self.new_timezone, self.new_channel, is_update=True, days_str=self.new_days)
 
     @nextcord.ui.button(label="Delete Reminder", style=nextcord.ButtonStyle.danger)
     async def delete_reminder(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -273,6 +324,71 @@ class ReminderPingView(nextcord.ui.View):
         await interaction.response.send_message(
             "⚙️ To change your workout slot, simply run the `/remindworkout` command again with your new time! You will be given the option to overwrite your existing time.",
             ephemeral=True
+        )
+
+    @nextcord.ui.button(label="Mod: Delete", style=nextcord.ButtonStyle.danger, emoji="🛡️")
+    async def mod_delete(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.guild is None or not isinstance(interaction.user, nextcord.Member):
+            return await interaction.response.send_message("This button only works inside a server.", ephemeral=True)
+
+        perms = interaction.user.guild_permissions
+        if not (perms.manage_guild or perms.administrator):
+            return await interaction.response.send_message("❌ Only moderators and admins can use this button.", ephemeral=True)
+
+        view = ModDeleteWarningView(self.reminders_collection, self.target_user_id, interaction.user.id)
+        await interaction.response.send_message(
+            f"⚠️ **You are about to delete workout reminder data set by <@{self.target_user_id}>.**\n\n"
+            f"Only do this for a valid reason, such as the wrong channel, spam, or abuse. "
+            f"Misusing this without good reason isn't appropriate, and users are within their rights "
+            f"to raise a complaint about moderator actions taken against them.\n\n"
+            f"Click **Continue** to provide a reason and proceed, or **Cancel** to back out.",
+            view=view,
+            ephemeral=True
+        )
+
+
+class ModDeleteWarningView(nextcord.ui.View):
+    def __init__(self, reminders_collection, target_user_id, moderator_id):
+        super().__init__(timeout=60)
+        self.reminders_collection = reminders_collection
+        self.target_user_id = target_user_id
+        self.moderator_id = moderator_id
+
+    @nextcord.ui.button(label="Continue", style=nextcord.ButtonStyle.danger, emoji="⚠️")
+    async def proceed(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user.id != self.moderator_id:
+            return await interaction.response.send_message("This confirmation isn't for you!", ephemeral=True)
+        await interaction.response.send_modal(ModReasonModal(self.reminders_collection, self.target_user_id))
+
+    @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.secondary)
+    async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user.id != self.moderator_id:
+            return await interaction.response.send_message("This confirmation isn't for you!", ephemeral=True)
+        for child in self.children:
+            child.disabled = True
+        await interaction.response.edit_message(content="❌ Cancelled. No changes made.", view=self)
+
+
+class ModReasonModal(nextcord.ui.Modal):
+    def __init__(self, reminders_collection, target_user_id):
+        super().__init__("Delete Workout Reminder")
+        self.reminders_collection = reminders_collection
+        self.target_user_id = target_user_id
+        self.reason = nextcord.ui.TextInput(
+            label="Reason for deleting this reminder",
+            placeholder="e.g. wrong channel, spam, requested by the user",
+            min_length=3,
+            max_length=300
+        )
+        self.add_item(self.reason)
+
+    async def callback(self, interaction: nextcord.Interaction):
+        await self.reminders_collection.delete_one({"user_id": str(self.target_user_id)})
+        print(f"[ModAction] {interaction.user} ({interaction.user.id}) deleted the workout reminder for user {self.target_user_id} in guild {interaction.guild_id}. Reason: {self.reason.value}")
+
+        await interaction.response.send_message(
+            f"🛡️ <@{self.target_user_id}>, your workout reminder was removed by a moderator.\n"
+            f"**Reason:** {self.reason.value}"
         )
 
 
