@@ -307,6 +307,18 @@ class WorkoutFinishView(nextcord.ui.View):
         await interaction.response.edit_message(content=msg, embed=None, view=None)
 
 
+def get_workout_file():
+    paths = [
+        "./assets/workout_img.jpg",
+        "assets/workout_img.jpg",
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "workout_img.jpg")
+    ]
+    for p in paths:
+        if os.path.exists(p):
+            return nextcord.File(fp=p, filename="workout_img.jpg")
+    return None
+
+
 class WorkoutSelectView(nextcord.ui.View):
     def __init__(self, stage, day_name, count):
         super().__init__(timeout=120)
@@ -337,11 +349,19 @@ class WorkoutSelectView(nextcord.ui.View):
         embed = nextcord.Embed(title=f"🔥 {self.stage} {path} Routine", color=0x9B59B6)
         embed.set_footer(text=f"Progress: {self.count} workouts completed | Stay disciplined.")
 
+        file = get_workout_file()
+        if file:
+            embed.set_thumbnail(url="attachment://workout_img.jpg")
+
         disclaimer_text = "⚠️ Warning: Leave the ego at the door. Strength comes from consistency and understanding your limits, do not ego lift or overexert yourself. Safety first warriors! 💪"
+
+        kwargs = {}
+        if file:
+            kwargs["file"] = file
 
         if routine == "Rest Day":
             embed.description = "🛋️ **Rest Day!** Recovery is where the muscle grows. See you tomorrow!"
-            await itx.response.edit_message(content=f"{disclaimer_text}\n\n{embed.description}" if not embed.description else disclaimer_text, embed=embed, view=None)
+            await itx.response.edit_message(content=f"{disclaimer_text}\n\n{embed.description}" if not embed.description else disclaimer_text, embed=embed, view=None, **kwargs)
             return
         
         if self.stage not in ["Novice Initiate", "Bronze Legionnaire"]:
@@ -352,7 +372,8 @@ class WorkoutSelectView(nextcord.ui.View):
                     
         finish_view = WorkoutFinishView(self.stage, self.count)
         
-        await itx.response.edit_message(content=disclaimer_text, embed=embed, view=finish_view)
+        await itx.response.edit_message(content=disclaimer_text, embed=embed, view=finish_view, **kwargs)
+
 
 
 class ScheduleSelectView(nextcord.ui.View):
