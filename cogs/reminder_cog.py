@@ -530,7 +530,7 @@ class ReminderManageSelect(nextcord.ui.Select):
                 description=f"{time_text} ({tz}) • #{ch_name}"[:100],
                 value=doc_id
             ))
-        super().__init__(placeholder="Select a reminder to delete...", options=options)
+        super().__init__(custom_id="reminder_manage_select", placeholder="Select a reminder to delete...", options=options)
 
     async def callback(self, interaction: nextcord.Interaction):
         doc_id_str = self.values[0]
