@@ -120,8 +120,12 @@ class WorkoutReminder(commands.Cog):
     ):
         await interaction.response.defer(ephemeral=True)
 
+        if interaction.guild is None:
+            await interaction.followup.send("⚠️ This command only works inside a server channel, not in DMs.", ephemeral=True)
+            return
+
         try:
-            existing_reminder = await self.reminders.find_one({"user_id": str(interaction.user.id)})
+            existing_reminder = await self.reminders.find_one({"user_id": str(interaction.user.id), "guild_id": interaction.guild_id})
         except Exception as db_err:
             print(f"MongoDB error: {db_err}")
             await interaction.followup.send("⚠️ Database error occurred. Please try again.", ephemeral=True)
@@ -130,16 +134,56 @@ class WorkoutReminder(commands.Cog):
         if existing_reminder:
             existing_time = existing_reminder.get("time_range_text", "Unknown Time")
             
-            view = ManageExistingReminderView(self, interaction.user.id, time, timezone_choice, channel, days)
+            view = ManageExistingReminderView(self, interaction.user.id, interaction.guild_id, time, timezone_choice, channel, days)
             await interaction.followup.send(
-                f"❌ **You can't set a new time directly because it is already set at `{existing_time}`!**\n\n"
-                f"Would you like to **Update** your current schedule to `{time}` (`{timezone_choice}`) or **Delete** your existing reminder entirely?",
+                f"❌ **You already have a reminder set in this server at `{existing_time}`!** To prevent spam, only one reminder is allowed per server, though you can set one in as many different servers as you like.\n\n"
+                f"Would you like to **Update** this server's reminder to `{time}` (`{timezone_choice}`) or **Delete** it entirely? Use `/myreminders` any time to see and manage every reminder you've set across all your servers.",
                 view=view,
                 ephemeral=True
             )
             return
 
         await self._process_reminder_setup(interaction, time, timezone_choice, channel, days_str=days)
+
+    @nextcord.slash_command(name="myreminders", description="View and manage every workout reminder you've set across all servers.")
+    async def my_reminders(self, interaction: nextcord.Interaction):
+        await interaction.response.defer(ephemeral=True)
+
+        try:
+            cursor = self.reminders.find({"user_id": str(interaction.user.id)})
+            all_reminders = await cursor.to_list(length=25)
+        except Exception as e:
+            print(f"MongoDB error in /myreminders: {e}")
+            await interaction.followup.send("⚠️ Database error occurred. Please try again.", ephemeral=True)
+            return
+
+        if not all_reminders:
+            await interaction.followup.send(
+                "You don't have any workout reminders set yet.\n"
+                "-# Use `/remindworkout` in a server channel to set one.",
+                ephemeral=True
+            )
+            return
+
+        embed = nextcord.Embed(
+            title="🔔 Your Workout Reminders",
+            description="Every server you've set a reminder in. Select one below to delete it.",
+            color=0x3498db
+        )
+        for r in all_reminders:
+            guild_name = r.get("guild_name", "Unknown Server")
+            channel_mention = f"<#{r.get('channel_id')}>"
+            time_text = r.get("time_range_text", "Unknown time")
+            tz = r.get("timezone", "UTC")
+            days_text = format_days(r.get("training_days", DEFAULT_TRAINING_DAYS))
+            embed.add_field(
+                name=f"🏟️ {guild_name}",
+                value=f"📍 {channel_mention}\n⏰ `{time_text}` ({tz})\n📅 {days_text}",
+                inline=False
+            )
+
+        view = ReminderManageView(self, all_reminders)
+        await interaction.followup.send(embed=embed, view=view, ephemeral=True)
 
     async def _process_reminder_setup(
         self, 
@@ -183,7 +227,10 @@ class WorkoutReminder(commands.Cog):
         reminder_data = {
             "user_id": str(interaction.user.id),
             "guild_id": interaction.guild_id,
+            "guild_name": interaction.guild.name if interaction.guild else "Unknown Server",
+            "guild_icon_url": str(interaction.guild.icon.url) if interaction.guild and interaction.guild.icon else None,
             "channel_id": target_channel.id,
+            "channel_name": target_channel.name,
             "timezone": timezone_str,
             "utc_ping_hour": utc_ping_dt.hour,
             "utc_ping_minute": utc_ping_dt.minute,
@@ -197,7 +244,7 @@ class WorkoutReminder(commands.Cog):
         }
 
         await self.reminders.update_one(
-            {"user_id": str(interaction.user.id)},
+            {"user_id": str(interaction.user.id), "guild_id": interaction.guild_id},
             {"$set": reminder_data},
             upsert=True
         )
@@ -205,7 +252,8 @@ class WorkoutReminder(commands.Cog):
         status_msg = "Updated!" if is_update else "Set!"
         start_time_formatted = parsed_time.strftime("%I:%M %p").lstrip("0")
         await interaction.followup.send(
-            f"✅ **Reminder {status_msg}** I will ping you in {target_channel.mention} 5 minutes before `{start_time_formatted}` ({timezone_str}) on **{format_days(training_days)}**. Get ready to train! 🥊",
+            f"✅ **Reminder {status_msg}** I will ping you in {target_channel.mention} 5 minutes before `{start_time_formatted}` ({timezone_str}) on **{format_days(training_days)}**. Get ready to train! 🥊\n"
+            f"-# Use `/myreminders` any time to view or manage every reminder you've set.",
             ephemeral=True
         )
 
@@ -258,7 +306,7 @@ class WorkoutReminder(commands.Cog):
         if channel:
             user_id = doc["user_id"]
 
-            view = ReminderPingView(self.reminders, int(user_id))
+            view = ReminderPingView(self.reminders, int(user_id), doc["guild_id"])
             try:
                 await channel.send(
                     f"🚨 <@{user_id}> **WORKOUT REMINDER!** 🚨\n"
@@ -274,10 +322,11 @@ class WorkoutReminder(commands.Cog):
 
 
 class ManageExistingReminderView(nextcord.ui.View):
-    def __init__(self, cog, user_id, new_time, new_timezone, new_channel, new_days=None):
+    def __init__(self, cog, user_id, guild_id, new_time, new_timezone, new_channel, new_days=None):
         super().__init__(timeout=60)
         self.cog = cog
         self.user_id = user_id
+        self.guild_id = guild_id
         self.new_time = new_time
         self.new_timezone = new_timezone
         self.new_channel = new_channel
@@ -297,15 +346,16 @@ class ManageExistingReminderView(nextcord.ui.View):
             return await interaction.response.send_message("This menu isn't for you!", ephemeral=True)
 
         await interaction.response.defer(ephemeral=True)
-        await self.cog.reminders.delete_one({"user_id": str(self.user_id)})
-        await interaction.followup.send("🗑️ **Your workout reminder has been deleted successfully.**", ephemeral=True)
+        await self.cog.reminders.delete_one({"user_id": str(self.user_id), "guild_id": self.guild_id})
+        await interaction.followup.send("🗑️ **Your reminder for this server has been deleted successfully.**", ephemeral=True)
 
 
 class ReminderPingView(nextcord.ui.View):
-    def __init__(self, reminders_collection, target_user_id):
+    def __init__(self, reminders_collection, target_user_id, guild_id):
         super().__init__(timeout=None)
         self.reminders_collection = reminders_collection
         self.target_user_id = target_user_id
+        self.guild_id = guild_id
 
     @nextcord.ui.button(label="Delete Reminder", style=nextcord.ButtonStyle.danger)
     async def delete_from_ping(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -313,8 +363,8 @@ class ReminderPingView(nextcord.ui.View):
             return await interaction.response.send_message("Only the scheduled athlete can delete this reminder!", ephemeral=True)
 
         await interaction.response.defer(ephemeral=True)
-        await self.reminders_collection.delete_one({"user_id": str(self.target_user_id)})
-        await interaction.followup.send("🗑️ **Reminder deleted.** You will no longer receive pings.", ephemeral=True)
+        await self.reminders_collection.delete_one({"user_id": str(self.target_user_id), "guild_id": self.guild_id})
+        await interaction.followup.send("🗑️ **Reminder deleted.** You will no longer receive pings in this server.", ephemeral=True)
 
     @nextcord.ui.button(label="How to Update Time", style=nextcord.ButtonStyle.secondary)
     async def update_help(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -335,7 +385,7 @@ class ReminderPingView(nextcord.ui.View):
         if not (perms.manage_guild or perms.administrator):
             return await interaction.response.send_message("❌ Only moderators and admins can use this button.", ephemeral=True)
 
-        view = ModDeleteWarningView(self.reminders_collection, self.target_user_id, interaction.user.id)
+        view = ModDeleteWarningView(self.reminders_collection, self.target_user_id, self.guild_id, interaction.user.id)
         await interaction.response.send_message(
             f"⚠️ **You are about to delete workout reminder data set by <@{self.target_user_id}>.**\n\n"
             f"Only do this for a valid reason, such as the wrong channel, spam, or abuse. "
@@ -348,17 +398,18 @@ class ReminderPingView(nextcord.ui.View):
 
 
 class ModDeleteWarningView(nextcord.ui.View):
-    def __init__(self, reminders_collection, target_user_id, moderator_id):
+    def __init__(self, reminders_collection, target_user_id, guild_id, moderator_id):
         super().__init__(timeout=60)
         self.reminders_collection = reminders_collection
         self.target_user_id = target_user_id
+        self.guild_id = guild_id
         self.moderator_id = moderator_id
 
     @nextcord.ui.button(label="Continue", style=nextcord.ButtonStyle.danger, emoji="⚠️")
     async def proceed(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         if interaction.user.id != self.moderator_id:
             return await interaction.response.send_message("This confirmation isn't for you!", ephemeral=True)
-        await interaction.response.send_modal(ModReasonModal(self.reminders_collection, self.target_user_id))
+        await interaction.response.send_modal(ModReasonModal(self.reminders_collection, self.target_user_id, self.guild_id))
 
     @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.secondary)
     async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -370,10 +421,11 @@ class ModDeleteWarningView(nextcord.ui.View):
 
 
 class ModReasonModal(nextcord.ui.Modal):
-    def __init__(self, reminders_collection, target_user_id):
+    def __init__(self, reminders_collection, target_user_id, guild_id):
         super().__init__("Delete Workout Reminder")
         self.reminders_collection = reminders_collection
         self.target_user_id = target_user_id
+        self.guild_id = guild_id
         self.reason = nextcord.ui.TextInput(
             label="Reason for deleting this reminder",
             placeholder="e.g. wrong channel, spam, requested by the user",
@@ -383,13 +435,77 @@ class ModReasonModal(nextcord.ui.Modal):
         self.add_item(self.reason)
 
     async def callback(self, interaction: nextcord.Interaction):
-        await self.reminders_collection.delete_one({"user_id": str(self.target_user_id)})
-        print(f"[ModAction] {interaction.user} ({interaction.user.id}) deleted the workout reminder for user {self.target_user_id} in guild {interaction.guild_id}. Reason: {self.reason.value}")
+        await self.reminders_collection.delete_one({"user_id": str(self.target_user_id), "guild_id": self.guild_id})
+        print(f"[ModAction] {interaction.user} ({interaction.user.id}) deleted the workout reminder for user {self.target_user_id} in guild {self.guild_id}. Reason: {self.reason.value}")
 
         await interaction.response.send_message(
-            f"🛡️ <@{self.target_user_id}>, your workout reminder was removed by a moderator.\n"
+            f"🛡️ <@{self.target_user_id}>, your workout reminder in this server was removed by a moderator.\n"
             f"**Reason:** {self.reason.value}"
         )
+
+
+class ReminderManageView(nextcord.ui.View):
+    def __init__(self, cog, reminders):
+        super().__init__(timeout=120)
+        self.add_item(ReminderManageSelect(cog, reminders))
+
+
+class ReminderManageSelect(nextcord.ui.Select):
+    def __init__(self, cog, reminders):
+        self.cog = cog
+        options = []
+        for r in reminders:
+            guild_name = (r.get("guild_name") or "Unknown Server")[:100]
+            time_text = r.get("time_range_text", "Unknown time")
+            tz = r.get("timezone", "UTC")
+            options.append(nextcord.SelectOption(
+                label=guild_name,
+                description=f"{time_text} ({tz}) • #{r.get('channel_name', 'unknown')}"[:100],
+                value=str(r["guild_id"])
+            ))
+        super().__init__(placeholder="Select a reminder to delete...", options=options)
+
+    async def callback(self, interaction: nextcord.Interaction):
+        selected_guild_id = int(self.values[0])
+        reminder = await self.cog.reminders.find_one({"user_id": str(interaction.user.id), "guild_id": selected_guild_id})
+        if not reminder:
+            return await interaction.response.send_message("That reminder no longer exists.", ephemeral=True)
+
+        guild_name = reminder.get("guild_name", "Unknown Server")
+        view = ConfirmDeleteReminderView(self.cog, interaction.user.id, selected_guild_id, guild_name)
+        await interaction.response.send_message(
+            f"⚠️ Delete your reminder for **{guild_name}**? This cannot be undone.",
+            view=view,
+            ephemeral=True
+        )
+
+
+class ConfirmDeleteReminderView(nextcord.ui.View):
+    def __init__(self, cog, user_id, guild_id, guild_name):
+        super().__init__(timeout=60)
+        self.cog = cog
+        self.user_id = user_id
+        self.guild_id = guild_id
+        self.guild_name = guild_name
+
+    @nextcord.ui.button(label="Yes, Delete", style=nextcord.ButtonStyle.danger)
+    async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user.id != self.user_id:
+            return await interaction.response.send_message("This confirmation isn't for you!", ephemeral=True)
+
+        await self.cog.reminders.delete_one({"user_id": str(self.user_id), "guild_id": self.guild_id})
+        for child in self.children:
+            child.disabled = True
+        await interaction.response.edit_message(content=f"🗑️ **Deleted your reminder for {self.guild_name}.**", view=self)
+
+    @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.secondary)
+    async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user.id != self.user_id:
+            return await interaction.response.send_message("This confirmation isn't for you!", ephemeral=True)
+
+        for child in self.children:
+            child.disabled = True
+        await interaction.response.edit_message(content="❌ Cancelled. No changes made.", view=self)
 
 
 def setup(bot):

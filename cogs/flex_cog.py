@@ -11,6 +11,21 @@ def normalize_name(name):
     return re.sub(r'[^a-zA-Z0-9]', '', name).lower()
 
 
+def get_rank_display(workout_count):
+    """Mirrors workout_cog.py's get_user_stage thresholds, using the same
+    display name shown in /levels and the website ('Novice / Beginner')."""
+    if workout_count >= 1000: return "Gladiator Maximus"
+    if workout_count >= 810: return "Titan Ascendant"
+    if workout_count >= 600: return "Apex Centurion"
+    if workout_count >= 390: return "Gold Gladiator"
+    if workout_count >= 330: return "Arena Master"
+    if workout_count >= 240: return "Gilded Champion"
+    if workout_count >= 150: return "Steel Centurion"
+    if workout_count >= 120: return "Iron Vanguard"
+    if workout_count >= 60: return "Bronze Legionnaire"
+    return "Novice / Beginner"
+
+
 def extract_number(stat_str):
     match = re.search(r"(\d+\.?\d*)", stat_str)
     return float(match.group(1)) if match else 0.0
@@ -123,12 +138,13 @@ class DeleteModal(Modal):
 
 
 class FlexPaginationView(View):
-    def __init__(self, owner_id, user_name, data, cog, show_archived=False):
+    def __init__(self, owner_id, user_name, data, cog, show_archived=False, workout_count=0):
         super().__init__(timeout=120)
         self.owner_id, self.user_name, self.cog = owner_id, user_name, cog
         self.page, self.per_page, self.show_archived = 0, 4, show_archived
         self.all_raw_data = data
         self.data = [f for f in data if ("(archived)" in f['exercise']) == show_archived]
+        self.workout_count = workout_count
         self.update_pages()
 
     def update_pages(self):
@@ -138,7 +154,8 @@ class FlexPaginationView(View):
         mode = "Archived" if self.show_archived else "Active"
         embed = nextcord.Embed(title=f"👾 {self.user_name}'s {mode} Flexes", color=0x9B59B6)
         embed.set_thumbnail(url="attachment://knight.png")
-        embed.set_footer(text=f"Page {self.page + 1} of {self.max_pages + 1}")
+        rank_name = get_rank_display(self.workout_count)
+        embed.set_footer(text=f"Page {self.page + 1} of {self.max_pages + 1} • 🏋️ {self.workout_count} workouts logged • 🎖️ {rank_name}")
         start = self.page * self.per_page
         for i, f in enumerate(self.data[start:start + self.per_page], 1):
             name = f['exercise'].replace('(archived)', '').strip()
@@ -177,18 +194,28 @@ class FlexPaginationView(View):
             print(f"MongoDB error refreshing flex data: {e}")
             return self.all_raw_data
 
+    async def get_fresh_stats(self):
+        try:
+            stats_doc = await self.cog.stats_collection.find_one({"_id": str(self.owner_id)})
+            return stats_doc.get("workout_count", 0) if stats_doc else 0
+        except Exception as e:
+            print(f"MongoDB error refreshing stats: {e}")
+            return self.workout_count
+
     @nextcord.ui.button(label="Menu", style=nextcord.ButtonStyle.secondary, row=1)
     async def menu(self, btn, req):
         await req.response.defer()
         fresh_data = await self.get_fresh_data()
-        new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, False)
+        fresh_count = await self.get_fresh_stats()
+        new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, False, workout_count=fresh_count)
         await req.edit_original_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
 
     @nextcord.ui.button(label="Archived", style=nextcord.ButtonStyle.secondary, row=1)
     async def toggle_archived(self, btn, req):
         await req.response.defer()
         fresh_data = await self.get_fresh_data()
-        new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, True)
+        fresh_count = await self.get_fresh_stats()
+        new_view = FlexPaginationView(self.owner_id, self.user_name, fresh_data, self.cog, True, workout_count=fresh_count)
         await req.edit_original_message(embed=new_view.create_embed(), view=new_view, file=nextcord.File(fp="./assets/knight.png", filename="knight.png"))
 
 
@@ -200,6 +227,7 @@ class FlexCog(commands.Cog):
         else:
             self.cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000)
         self.collection = self.cluster["GymBotDB"]["user_flexes"]
+        self.stats_collection = self.cluster["GymBotDB"]["user_stats"]
 
     async def delete_specific_flex(self, user_id, target_item):
         user_data = await self.collection.find_one({"_id": user_id})
@@ -237,7 +265,15 @@ class FlexCog(commands.Cog):
         except Exception as e:
             print(f"MongoDB error in /flex: {e}")
             data = []
-        view = FlexPaginationView(interaction.user.id, interaction.user.display_name, data, self)
+
+        try:
+            stats_doc = await self.stats_collection.find_one({"_id": str(interaction.user.id)})
+            workout_count = stats_doc.get("workout_count", 0) if stats_doc else 0
+        except Exception as e:
+            print(f"MongoDB error fetching stats in /flex: {e}")
+            workout_count = 0
+
+        view = FlexPaginationView(interaction.user.id, interaction.user.display_name, data, self, workout_count=workout_count)
 
         file = None
         for p in ["./assets/knight.png", "assets/knight.png", os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "knight.png")]:
