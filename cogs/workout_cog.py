@@ -304,7 +304,7 @@ class WorkoutFinishView(nextcord.ui.View):
         else:
             msg = "💪 Workout logged!"
 
-        await interaction.response.edit_message(content=msg, embed=None, view=None)
+        await interaction.response.edit_message(content=msg, embed=None, view=None, attachments=[])
 
 
 def get_workout_file():
