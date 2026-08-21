@@ -21,6 +21,7 @@ class HelpCog(commands.Cog):
                 "• **`/myworkout`**. View your workout history, current streak, and personal progression stats.\n\n"
                 "• **`/resetworkout`**. Wipe your workout count and rank back to zero and restart your climb from Level 1: Novice / Beginner. ⚠️ This cannot be undone.\n\n"
                 "• **`/remindworkout`**. Set custom reminders so you never miss a scheduled training session.\n\n"
+                "• **`/myreminders`**. View and manage every workout reminder you've set, across every server, in one place.\n\n"
                 "• **`/levels`**. View the grueling path of discipline, ranks, and workout milestones.\n\n"
                 "• **`/flex`**. Flex your achievements, new PRs, and workout streaks directly in the server.\n\n"
                 "• **`/diet`**. Log and track your daily nutrition, calories, and macros to stay on target.\n\n"
