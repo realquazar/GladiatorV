@@ -451,15 +451,15 @@ class WorkoutCog(commands.Cog):
         if not user: return "Novice Initiate", 0
         count = user.get("workout_count", 0)
         
-        if count >= 1000: return "Gladiator Maximus", count
-        if count >= 810: return "Titan Ascendant", count
-        if count >= 600: return "Apex Centurion", count
-        if count >= 390: return "Gold Gladiator", count
-        if count >= 330: return "Arena Master", count
-        if count >= 240: return "Gilded Champion", count
-        if count >= 150: return "Steel Centurion", count
-        if count >= 120: return "Iron Vanguard", count
-        if count >= 60: return "Bronze Legionnaire", count
+        if count >= 810: return "Gladiator Maximus", count
+        if count >= 600: return "Titan Ascendant", count
+        if count >= 390: return "Apex Centurion", count
+        if count >= 330: return "Gold Gladiator", count
+        if count >= 240: return "Arena Master", count
+        if count >= 150: return "Gilded Champion", count
+        if count >= 120: return "Steel Centurion", count
+        if count >= 60: return "Iron Vanguard", count
+        if count >= 30: return "Bronze Legionnaire", count
         return "Novice Initiate", count
     
     @nextcord.slash_command(name="schedule", description="View the weekly training split details")

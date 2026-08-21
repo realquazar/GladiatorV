@@ -14,15 +14,15 @@ def normalize_name(name):
 def get_rank_display(workout_count):
     """Mirrors workout_cog.py's get_user_stage thresholds, using the same
     display name shown in /levels and the website ('Novice / Beginner')."""
-    if workout_count >= 1000: return "Gladiator Maximus"
-    if workout_count >= 810: return "Titan Ascendant"
-    if workout_count >= 600: return "Apex Centurion"
-    if workout_count >= 390: return "Gold Gladiator"
-    if workout_count >= 330: return "Arena Master"
-    if workout_count >= 240: return "Gilded Champion"
-    if workout_count >= 150: return "Steel Centurion"
-    if workout_count >= 120: return "Iron Vanguard"
-    if workout_count >= 60: return "Bronze Legionnaire"
+    if workout_count >= 810: return "Gladiator Maximus"
+    if workout_count >= 600: return "Titan Ascendant"
+    if workout_count >= 390: return "Apex Centurion"
+    if workout_count >= 330: return "Gold Gladiator"
+    if workout_count >= 240: return "Arena Master"
+    if workout_count >= 150: return "Gilded Champion"
+    if workout_count >= 120: return "Steel Centurion"
+    if workout_count >= 60: return "Iron Vanguard"
+    if workout_count >= 30: return "Bronze Legionnaire"
     return "Novice / Beginner"
 
 
