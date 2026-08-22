@@ -4,6 +4,7 @@ import datetime
 import motor.motor_asyncio
 import os
 import re
+import asyncio
 from bson import ObjectId
 
 TIMEZONE_OFFSETS = {
@@ -110,6 +111,17 @@ class WorkoutReminder(commands.Cog):
             await self.reminders.create_index(
                 [("user_id", 1), ("guild_id", 1)],
                 unique=True
+            )
+            # check_reminders runs this exact filter every 60 seconds, forever. Without an
+            # index, Mongo has to scan every single reminder document on every tick, so this
+            # gets slower and slower as more people set reminders. This index makes each tick
+            # an O(log n) lookup instead of a full collection scan.
+            await self.reminders.create_index(
+                [("enabled", 1), ("utc_ping_hour", 1), ("utc_ping_minute", 1)]
+            )
+            # Same reasoning for the legacy (pre-UTC) fallback query.
+            await self.reminders.create_index(
+                [("enabled", 1), ("utc_ping_hour", 1)]
             )
         except Exception as e:
             print(f"[WorkoutReminder] Index check warning: {e}")
@@ -325,10 +337,7 @@ class WorkoutReminder(commands.Cog):
             "utc_ping_hour": utc_hour,
             "utc_ping_minute": utc_minute
         })
-
-        async for doc in cursor:
-            if self.is_training_day(doc, now_utc):
-                await self._send_reminder_ping(doc)
+        due = [doc async for doc in cursor if self.is_training_day(doc, now_utc)]
 
         # Fallback for legacy documents without utc_ping_hour
         now_local = datetime.datetime.now()
@@ -340,10 +349,14 @@ class WorkoutReminder(commands.Cog):
                 {"start_hour": now_local.hour, "start_minute": now_local.minute}
             ]
         })
+        due += [doc async for doc in legacy_cursor if self.is_training_day(doc, now_utc)]
 
-        async for doc in legacy_cursor:
-            if self.is_training_day(doc, now_utc):
-                await self._send_reminder_ping(doc)
+        if due:
+            # Fire all of this minute's pings concurrently instead of one-by-one, so a busy
+            # minute (many people sharing a wake-up time) doesn't take longer and longer to
+            # clear as the user base grows. nextcord's own rate limiter still paces the
+            # actual Discord API calls safely underneath this.
+            await asyncio.gather(*(self._send_reminder_ping(doc) for doc in due), return_exceptions=True)
 
     def is_training_day(self, doc, now_utc):
         tz_offset = TIMEZONE_OFFSETS.get(doc.get("timezone", "UTC"), TIMEZONE_OFFSETS["UTC"])
