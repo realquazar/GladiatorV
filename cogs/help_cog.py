@@ -18,6 +18,7 @@ class HelpCog(commands.Cog):
                 "📜 **COMMANDS**\n\n"
                 "• **`/schedule`**. Set up or customize your personal workout schedule and routine.\n\n"
                 "• **`/startworkout`**. Begin your active workout session for the day and follow guided exercises.\n\n"
+                "• **`/exercise`**. View proper form, tips, and demonstration guides for any exercise.\n\n"
                 "• **`/myworkout`**. View your workout history, current streak, and personal progression stats.\n\n"
                 "• **`/resetworkout`**. Wipe your workout count and rank back to zero and restart your climb from Level 1: Novice / Beginner. ⚠️ This cannot be undone.\n\n"
                 "• **`/remindworkout`**. Set custom reminders so you never miss a scheduled training session.\n\n"
