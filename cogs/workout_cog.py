@@ -221,25 +221,25 @@ EXERCISE_GUIDES = {
         "category": "Warm-up / Mobility",
         "muscles": "Rotator Cuff, Deltoids, Trapezius, Cervical Spine",
         "form": (
-            "1. **Neck Circles:** Stand tall with shoulders relaxed. Slowly roll your neck in gentle 360-degree circles. Reverse direction after 5 reps.\n"
-            "2. **Arm Circles:** Extend both arms straight out to sides at shoulder height. Make small controlled forward circles, gradually widening them.\n"
-            "3. **Reverse:** Reverse the arm rotation backward, opening the chest and activating shoulder stabilizers."
+            "1. **Neck Rotations:** Stand upright with shoulders relaxed. Slowly rotate your head in smooth, controlled circles. Reverse direction after 5 reps.\n"
+            "2. **Arm Circles:** Extend arms straight out to sides at shoulder height. Rotate arms in small controlled circles, gradually widening them.\n"
+            "3. **Reverse Circles:** Reverse rotation direction to warm up shoulder joints and rotator cuff muscles."
         ),
-        "tips": "• Move slowly and never jerk or whip your neck.\n• Keep breathing steadily throughout the mobility warm-up.",
-        "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80"
+        "tips": "• Move smoothly without jerking your neck.\n• Keep shoulders relaxed and down away from your ears.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Arm_Circles/0.jpg"
     },
     "Dumbbell bicep curls": {
         "title": "Dumbbell Bicep Curls",
         "category": "Gym / Arms",
         "muscles": "Biceps Brachii, Brachialis, Forearms",
         "form": (
-            "1. Stand with feet shoulder-width apart, holding dumbbells at your sides with palms facing forward.\n"
-            "2. Keep your elbows tucked close to your torso and stationary.\n"
-            "3. Exhale and curl the dumbbells up toward shoulder level by contracting your biceps.\n"
-            "4. Squeeze your biceps at the peak for 1 second, then slowly lower the weights (2-3 seconds) back to starting position."
+            "1. Stand with feet shoulder-width apart holding dumbbells at sides with palms facing forward.\n"
+            "2. Keep elbows tucked close to your torso.\n"
+            "3. Exhale and curl the weights up towards shoulders by contracting biceps.\n"
+            "4. Squeeze biceps at peak for 1 second, then lower with control (2-3 seconds)."
         ),
-        "tips": "• Do not swing your body or use momentum from your lower back.\n• Keep your wrists straight and firm throughout the movement.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Biceps-curl-1.svg/800px-Biceps-curl-1.svg.png"
+        "tips": "• Do not swing your body or use momentum from your lower back.\n• Keep wrists straight and firm throughout.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bicep_Curl/0.jpg"
     },
     "Hammer curls": {
         "title": "Dumbbell Hammer Curls",
@@ -247,64 +247,64 @@ EXERCISE_GUIDES = {
         "muscles": "Brachioradialis (Forearms), Brachialis, Biceps",
         "form": (
             "1. Stand upright holding dumbbells with a neutral grip (palms facing inward toward each other).\n"
-            "2. Keeping your upper arms fixed to your sides, bend at the elbows to curl the dumbbells upward.\n"
-            "3. Lift until the top of the dumbbells are near shoulder height.\n"
-            "4. Pause and squeeze the forearms and biceps, then lower with strict control."
+            "2. Keeping upper arms fixed to sides, bend at elbows to curl dumbbells upward.\n"
+            "3. Lift until top of dumbbells are near shoulder height.\n"
+            "4. Pause and squeeze forearms and biceps, then lower with strict control."
         ),
         "tips": "• Keep elbows pinned to your ribs; do not let them drift forward.\n• Maintain a neutral wrist angle without bending wrists inward.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Biceps-curl-2.svg/800px-Biceps-curl-2.svg.png"
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hammer_Curls/0.jpg"
     },
     "Overhead Triceps extension": {
         "title": "Overhead Triceps Extension",
         "category": "Gym / Arms",
         "muscles": "Triceps Brachii (Long Head)",
         "form": (
-            "1. Stand or sit upright holding a dumbbell or rope attachment with both hands raised straight overhead.\n"
-            "2. Keep your upper arms vertical and close to your ears, elbows pointing forward.\n"
-            "3. Inhale and slowly bend your elbows to lower the weight behind your head until your forearms reach ~90 degrees.\n"
-            "4. Exhale and push the weight back up by extending your triceps until arms are fully locked out."
+            "1. Stand or sit upright holding dumbbell overhead with both hands.\n"
+            "2. Keep upper arms vertical and close to ears, elbows pointing forward.\n"
+            "3. Inhale and slowly lower weight behind head until forearms reach ~90 degrees.\n"
+            "4. Exhale and push weight back up by extending triceps until arms are fully locked out."
         ),
-        "tips": "• Avoid flaring your elbows out to the sides.\n• Brace your core so you don't over-arch your lower back.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Triceps-dip-1.png/800px-Triceps-dip-1.png"
+        "tips": "• Avoid flaring elbows out to sides.\n• Brace core so you don't over-arch lower back.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Dumbbell_Triceps_Extension/0.jpg"
     },
     "Preacher curls": {
         "title": "Preacher Curls",
         "category": "Gym / Arms",
         "muscles": "Biceps Brachii (Short Head Isolation)",
         "form": (
-            "1. Sit at a preacher bench with the back of your upper arms resting firmly against the slanted pad.\n"
-            "2. Hold an EZ-curl bar or dumbbells with an underhand grip, arms extended.\n"
-            "3. Curl the weight upward toward your chin while keeping your armpits snug against the top of the pad.\n"
-            "4. Squeeze biceps at the top, then lower with control until arms are almost fully extended (don't hyperextend)."
+            "1. Sit at preacher bench with upper arms resting firmly against slanted pad.\n"
+            "2. Hold EZ-curl bar or dumbbells with an underhand grip, arms extended.\n"
+            "3. Curl weight upward toward chin while keeping armpits snug against top of pad.\n"
+            "4. Squeeze biceps at peak, then lower with control until arms are almost fully extended."
         ),
-        "tips": "• Do not lift your torso or armpits off the pad to cheat the weight up.\n• Control the eccentric (lowering) phase smoothly to protect elbows.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Biceps-curl-1.svg/800px-Biceps-curl-1.svg.png"
+        "tips": "• Do not lift torso or armpits off pad.\n• Control the eccentric (lowering) phase smoothly to protect elbows.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Preacher_Curl/0.jpg"
     },
     "Overhead press": {
         "title": "Overhead Press (Shoulder Press)",
         "category": "Gym / Shoulders",
         "muscles": "Anterior & Lateral Deltoids, Triceps, Upper Chest, Core",
         "form": (
-            "1. Stand with feet hip-width apart, holding weights at shoulder height with palms facing forward.\n"
-            "2. Brace your abs and squeeze your glutes for a rock-solid base.\n"
-            "3. Press the weights straight overhead until your arms are fully extended.\n"
-            "4. Lower the weight under control back to collarbone/shoulder height."
+            "1. Stand feet hip-width apart holding weights at shoulder height with palms facing forward.\n"
+            "2. Brace abs and squeeze glutes for a solid base.\n"
+            "3. Press weights straight overhead until arms are fully extended.\n"
+            "4. Lower weight under control back to shoulder height."
         ),
-        "tips": "• Avoid leaning backward or hyperextending your lumbar spine.\n• Keep your head neutral and push the weight vertically in a straight bar path.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Shoulder-press-1.png/800px-Shoulder-press-1.png"
+        "tips": "• Avoid leaning backward or hyperextending lumbar spine.\n• Keep head neutral and push weight vertically in a straight path.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg"
     },
     "Crunches": {
         "title": "Abdominal Crunches",
         "category": "Core",
         "muscles": "Rectus Abdominis (Upper Abs)",
         "form": (
-            "1. Lie on your back with knees bent and feet flat on the floor, hip-width apart.\n"
-            "2. Place fingertips lightly behind your ears or cross your hands over your chest.\n"
-            "3. Exhale and contract your abdominals, lifting your shoulder blades 2-3 inches off the ground.\n"
-            "4. Squeeze your core hard at the top for 1 second, then slowly lower back down."
+            "1. Lie on back with knees bent and feet flat on floor, hip-width apart.\n"
+            "2. Place fingertips lightly behind ears or cross hands over chest.\n"
+            "3. Exhale and contract abdominals, lifting shoulder blades 2-3 inches off ground.\n"
+            "4. Squeeze core hard at top for 1 second, then slowly lower back down."
         ),
-        "tips": "• Do NOT pull on your neck or tuck your chin into your chest.\n• Keep your lower back pressed into the mat throughout.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Crunch-1.svg/800px-Crunch-1.svg.png"
+        "tips": "• Do NOT pull on neck or tuck chin into chest.\n• Keep lower back pressed into floor.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Crunches/0.jpg"
     },
     "Crunches / Ab crunch machine": {
         "title": "Crunches / Ab Crunch Machine",
@@ -312,64 +312,64 @@ EXERCISE_GUIDES = {
         "muscles": "Rectus Abdominis",
         "form": (
             "1. **Floor Crunch:** Lie on mat with knees bent; curl shoulders up toward knees using abdominal contraction.\n"
-            "2. **Machine Crunch:** Sit securely in the machine, feet hooked under pads and hands holding handles.\n"
-            "3. Flex forward at the waist by squeezing your abs to bring elbows towards knees.\n"
-            "4. Pause for a peak contraction, then slowly return without letting the weight stack slam."
+            "2. **Machine Crunch:** Sit securely in machine, feet hooked under pads and hands holding handles.\n"
+            "3. Flex forward at waist by squeezing abs to bring elbows towards knees.\n"
+            "4. Pause for peak contraction, then slowly return without letting weight stack slam."
         ),
-        "tips": "• Focus on curling your ribcage toward your pelvis, not pushing with arms.\n• Keep breathing rhythmic—exhale as you crunch.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Crunch-1.svg/800px-Crunch-1.svg.png"
+        "tips": "• Focus on curling ribcage toward pelvis, not pushing with arms.\n• Keep breathing rhythmic—exhale as you crunch.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Ab_Crunch_Machine/0.jpg"
     },
     "Seated Cable row": {
         "title": "Seated Cable Row",
         "category": "Gym / Back",
         "muscles": "Latissimus Dorsi, Rhomboids, Middle Traps, Biceps",
         "form": (
-            "1. Sit on the bench with knees slightly bent and feet placed on the footrests.\n"
-            "2. Grasp the V-bar handle with a neutral grip and sit upright with chest lifted and back straight.\n"
-            "3. Pull the handle toward your lower abdomen while driving elbows back and squeezing shoulder blades.\n"
-            "4. Hold for 1 second, then slowly extend your arms back to starting position."
+            "1. Sit on bench with knees slightly bent and feet placed on footrests.\n"
+            "2. Grasp V-bar handle with neutral grip and sit upright with chest lifted and back straight.\n"
+            "3. Pull handle toward lower abdomen while driving elbows back and squeezing shoulder blades.\n"
+            "4. Hold for 1 second, then slowly extend arms back to starting position."
         ),
-        "tips": "• Avoid excessive rocking or swinging back and forth.\n• Keep your chest proud and spine neutral at all times.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lat-pulldown-1.png/800px-Lat-pulldown-1.png"
+        "tips": "• Avoid excessive rocking or swinging back and forth.\n• Keep chest proud and spine neutral at all times.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg"
     },
     "Cable lats pulldown": {
         "title": "Cable Lat Pulldown",
         "category": "Gym / Back",
         "muscles": "Latissimus Dorsi, Teres Major, Biceps, Rear Delts",
         "form": (
-            "1. Sit at the pulldown machine and adjust the thigh pad snugly over your legs.\n"
-            "2. Grasp the wide bar with an overhand grip slightly wider than shoulder-width.\n"
-            "3. Lean back slightly (~10-15 degrees), pull the bar down to your upper chest by driving elbows down.\n"
-            "4. Squeeze your lats at the bottom, then slowly return the bar under control."
+            "1. Sit at pulldown machine and adjust thigh pad snugly over legs.\n"
+            "2. Grasp wide bar with overhand grip slightly wider than shoulder-width.\n"
+            "3. Lean back slightly (~10-15 degrees), pull bar down to upper chest by driving elbows down.\n"
+            "4. Squeeze lats at bottom, then slowly return bar under control."
         ),
-        "tips": "• Pull with your back muscles and elbows, not just your forearms.\n• Never pull the bar behind your neck to protect your cervical spine.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lat-pulldown-1.png/800px-Lat-pulldown-1.png"
+        "tips": "• Pull with back muscles and elbows, not just forearms.\n• Never pull bar behind neck to protect cervical spine.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg"
     },
     "Pec dec": {
         "title": "Pec Dec (Chest Fly Machine)",
         "category": "Gym / Chest",
         "muscles": "Pectoralis Major (Sternal Head)",
         "form": (
-            "1. Adjust seat height so handles or arm pads align directly with the middle of your chest.\n"
-            "2. Place forearms/hands on the pads and press your upper back flat against the backrest.\n"
-            "3. Inhale, then exhale as you bring the handles together in front of your chest in an arc motion.\n"
-            "4. Squeeze your chest firmly at the center for 1 second, then slowly open arms back to starting stretch."
+            "1. Adjust seat height so handles or arm pads align directly with middle of chest.\n"
+            "2. Place forearms/hands on pads and press upper back flat against backrest.\n"
+            "3. Inhale, then exhale as you bring handles together in front of chest in an arc motion.\n"
+            "4. Squeeze chest firmly at center for 1 second, then slowly open arms back to starting stretch."
         ),
-        "tips": "• Maintain a slight, soft bend in your elbows; don't lock or bend them excessively.\n• Don't let your shoulders roll forward at the peak squeeze.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Bench-press-1.png/800px-Bench-press-1.png"
+        "tips": "• Maintain a soft bend in elbows; don't lock or bend them excessively.\n• Don't let shoulders roll forward at peak squeeze.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Butterfly/0.jpg"
     },
     "Bench press": {
         "title": "Barbell / Dumbbell Bench Press",
         "category": "Gym / Chest",
         "muscles": "Pectoralis Major, Anterior Deltoids, Triceps",
         "form": (
-            "1. Lie flat on the bench with eyes directly under the bar and feet planted firmly on the floor.\n"
-            "2. Grip the bar slightly wider than shoulder-width with thumbs wrapped around.\n"
-            "3. Unrack the bar, lower it with control to mid-chest while tucking elbows at roughly a 45-degree angle.\n"
-            "4. Touch chest lightly, then press forcefully back up to lockout above your chest."
+            "1. Lie flat on bench with eyes directly under bar and feet planted firmly on floor.\n"
+            "2. Grip bar slightly wider than shoulder-width with thumbs wrapped around.\n"
+            "3. Unrack bar, lower with control to mid-chest while tucking elbows at roughly 45-degree angle.\n"
+            "4. Touch chest lightly, then press forcefully back up to lockout above chest."
         ),
-        "tips": "• Retract shoulder blades and keep your butt glued to the bench.\n• Avoid flaring your elbows straight out at 90 degrees.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Bench-press-1.png/800px-Bench-press-1.png"
+        "tips": "• Retract shoulder blades and keep butt glued to bench.\n• Avoid flaring elbows straight out at 90 degrees.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
     },
     "Bodyweight squats": {
         "title": "Bodyweight Squats",
@@ -377,12 +377,12 @@ EXERCISE_GUIDES = {
         "muscles": "Quadriceps, Gluteus Maximus, Hamstrings, Calves, Core",
         "form": (
             "1. Stand with feet slightly wider than shoulder-width, toes angled 15-30 degrees outward.\n"
-            "2. Keep your chest high, gaze forward, and hands clasped in front of your chest.\n"
-            "3. Hinge hips back and bend knees, lowering your body until thighs are parallel to the floor (or deeper).\n"
-            "4. Drive through mid-foot and heels to return to standing, squeezing glutes at the top."
+            "2. Keep chest high, gaze forward, and hands clasped in front of chest.\n"
+            "3. Hinge hips back and bend knees, lowering body until thighs are parallel to floor.\n"
+            "4. Drive through heels to return to standing, squeezing glutes at top."
         ),
-        "tips": "• Keep your knees tracking in line with your toes—don't let them cave inward.\n• Keep heels grounded throughout the entire repetition.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Squats-1.svg/800px-Squats-1.svg.png"
+        "tips": "• Keep knees tracking in line with toes—don't let them cave inward.\n• Keep heels grounded throughout entire movement.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/0.jpg"
     },
     "Weighted squats": {
         "title": "Weighted Squats (Barbell / Dumbbell)",
@@ -390,155 +390,154 @@ EXERCISE_GUIDES = {
         "muscles": "Quadriceps, Glutes, Hamstrings, Spinal Erectors, Core",
         "form": (
             "1. Position barbell on upper traps (or hold dumbbells at sides/goblet position).\n"
-            "2. Stand with feet shoulder-width apart, brace core tightly.\n"
-            "3. Break at hips and knees simultaneously, lowering down until thighs are parallel to the ground.\n"
-            "4. Push the floor away through your heels to stand up powerfully."
+            "2. Stand feet shoulder-width apart, brace core tightly.\n"
+            "3. Break at hips and knees simultaneously, lowering down until thighs are parallel to ground.\n"
+            "4. Push floor away through heels to stand up powerfully."
         ),
-        "tips": "• Maintain a neutral spine; do not round your lower back.\n• Take a deep breath into your belly and brace before descending.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Squats-1.svg/800px-Squats-1.svg.png"
+        "tips": "• Maintain neutral spine; do not round lower back.\n• Take a deep breath into belly and brace before descending.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Squat/0.jpg"
     },
     "Leg press": {
         "title": "Leg Press",
         "category": "Gym / Legs",
         "muscles": "Quadriceps, Glutes, Hamstrings",
         "form": (
-            "1. Sit in the machine with your back and head resting comfortably against the padded support.\n"
-            "2. Place feet shoulder-width apart on the sled platform.\n"
-            "3. Disengage safety bars and slowly lower the sled until knees form a 90-degree angle.\n"
-            "4. Press back up through your heels and mid-foot to full extension (do NOT lock knees)."
+            "1. Sit in machine with back and head resting comfortably against padded support.\n"
+            "2. Place feet shoulder-width apart on platform.\n"
+            "3. Disengage safety bars and slowly lower sled until knees form 90-degree angle.\n"
+            "4. Press back up through heels to full extension (do NOT lock knees)."
         ),
-        "tips": "• Never fully lock out your knees at the top of the press.\n• Ensure your lower back and glutes remain pressed flat against the seat.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Leg-press-1.png/800px-Leg-press-1.png"
+        "tips": "• Never fully lock out knees at top of press.\n• Ensure lower back and glutes remain pressed flat against seat.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg"
     },
     "Incline leg press": {
         "title": "45° Incline Leg Press",
         "category": "Gym / Legs",
         "muscles": "Quadriceps, Glutes, Hamstrings",
         "form": (
-            "1. Sit securely into the 45-degree leg press with lower back firmly against the pad.\n"
-            "2. Place feet in the center of the plate, shoulder-width apart.\n"
-            "3. Inhale and lower the weight under strict control until thighs approach 90 degrees with knees.\n"
-            "4. Exhale and drive through heels to press the platform back up."
+            "1. Sit securely into 45-degree leg press with lower back firmly against pad.\n"
+            "2. Place feet in center of plate, shoulder-width apart.\n"
+            "3. Inhale and lower weight under strict control until thighs approach 90 degrees with knees.\n"
+            "4. Exhale and drive through heels to press platform back up."
         ),
-        "tips": "• Stop descending if your pelvis or lower back begins to roll off the pad.\n• Keep knees aligned with feet.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Leg-press-1.png/800px-Leg-press-1.png"
+        "tips": "• Stop descending if pelvis or lower back rolls off pad.\n• Keep knees aligned with feet.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg"
     },
     "Leg extension": {
         "title": "Seated Leg Extension",
         "category": "Gym / Legs",
         "muscles": "Quadriceps (Isolation)",
         "form": (
-            "1. Sit on the machine with knees aligned with the pivot point and shin pad resting above ankles.\n"
-            "2. Grip side handles firmly to keep your hips anchored.\n"
-            "3. Extend your legs forward until fully straight, contracting the quads hard at the top.\n"
-            "4. Pause for 1 second, then lower the weight slowly (2-3 seconds) back down."
+            "1. Sit on machine with knees aligned with pivot point and shin pad resting above ankles.\n"
+            "2. Grip side handles firmly to keep hips anchored.\n"
+            "3. Extend legs forward until fully straight, contracting quads hard at top.\n"
+            "4. Pause for 1 second, then lower weight slowly back down."
         ),
-        "tips": "• Do not use jerky momentum or swing your hips off the seat.\n• Control the weight all the way down for maximum hypertrophy.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Leg-extension-1.png/800px-Leg-extension-1.png"
+        "tips": "• Do not use jerky momentum or swing hips off seat.\n• Control weight all the way down for maximum hypertrophy.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/0.jpg"
     },
     "Seated leg curl": {
         "title": "Seated Leg Curl",
         "category": "Gym / Legs",
         "muscles": "Hamstrings (Biceps Femoris, Semitendinosus)",
         "form": (
-            "1. Sit with back against pad, thigh brace adjusted snugly on top of thighs, and lever pad behind lower calves.\n"
+            "1. Sit with back against pad, thigh brace adjusted snugly on top of thighs, lever pad behind lower calves.\n"
             "2. Grasp handles and keep torso firmly pressed against back support.\n"
-            "3. Flex knees to curl the lever down and backward toward your seat.\n"
+            "3. Flex knees to curl lever down and backward toward seat.\n"
             "4. Squeeze hamstrings tight at peak flexion, then return slowly to starting position."
         ),
-        "tips": "• Keep toes pointed straight ahead or slightly flexed.\n• Avoid arching your lower back during the contraction.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Leg-curl-1.png/800px-Leg-curl-1.png"
+        "tips": "• Keep toes pointed straight ahead or slightly flexed.\n• Avoid arching lower back during contraction.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Leg_Curl/0.jpg"
     },
     "Treadmill": {
         "title": "Treadmill Cardio / Jogging",
         "category": "Cardio / Conditioning",
         "muscles": "Cardiovascular System, Calves, Quads, Hamstrings",
         "form": (
-            "1. Step onto treadmill belt, attach safety clip, and start at a brisk walking pace.\n"
-            "2. Keep shoulders relaxed, chest open, and arms bent at 90 degrees swinging rhythmically.\n"
-            "3. Land softly on midfoot (not heavy on heels) with a slight forward lean from the ankles.\n"
-            "4. Maintain steady, rhythmic nasal-oral breathing."
+            "1. Step onto treadmill belt, attach safety clip, start at brisk walking pace.\n"
+            "2. Keep shoulders relaxed, chest open, arms bent at 90 degrees swinging rhythmically.\n"
+            "3. Land softly on midfoot with slight forward lean from ankles.\n"
+            "4. Maintain steady, rhythmic breathing."
         ),
-        "tips": "• Avoid gripping the handrails while running.\n• Look straight ahead, not down at your feet.",
-        "image_url": "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=800&q=80"
+        "tips": "• Avoid gripping handrails while running.\n• Look straight ahead, not down at feet.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Running_Treadmill/0.jpg"
     },
     "Running": {
         "title": "Outdoor / Track Running",
         "category": "Cardio / Conditioning",
         "muscles": "Cardiovascular System, Glutes, Quads, Hamstrings, Calves",
         "form": (
-            "1. Maintain an upright posture with a slight whole-body forward lean.\n"
-            "2. Strike the ground beneath your center of gravity with your midfoot.\n"
-            "3. Drive knees forward and cycle feet smoothly with a cadence around 160-180 steps/min.\n"
-            "4. Keep hands relaxed and shoulders away from your ears."
+            "1. Maintain upright posture with slight whole-body forward lean.\n"
+            "2. Strike ground beneath center of gravity with midfoot.\n"
+            "3. Drive knees forward and cycle feet smoothly with cadence around 160-180 steps/min.\n"
+            "4. Keep hands relaxed and shoulders away from ears."
         ),
-        "tips": "• Don't overstride (landing too far ahead of your hips).\n• Pace yourself according to the session duration.",
-        "image_url": "https://images.unsplash.com/photo-1486218119243-13883505764c?auto=format&fit=crop&w=800&q=80"
+        "tips": "• Don't overstride (landing too far ahead of hips).\n• Pace yourself according to session duration.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Running_Treadmill/0.jpg"
     },
     "Push Ups": {
         "title": "Standard Push-Ups",
         "category": "Calisthenics / Chest & Triceps",
         "muscles": "Pectoralis Major, Anterior Deltoids, Triceps, Core",
         "form": (
-            "1. Place hands shoulder-width apart on the floor with fingers spread, body in a rigid high plank.\n"
-            "2. Squeeze glutes and brace your core so your body forms a straight line from heels to head.\n"
-            "3. Lower your chest until it is about 1-2 inches above the floor, keeping elbows angled at 45 degrees.\n"
-            "4. Push through palms to lock out arms at the top."
+            "1. Place hands shoulder-width apart on floor, body in rigid high plank.\n"
+            "2. Squeeze glutes and brace core so body forms straight line from heels to head.\n"
+            "3. Lower chest until 1-2 inches above floor, keeping elbows angled at 45 degrees.\n"
+            "4. Push through palms to lock out arms at top."
         ),
-        "tips": "• Don't let your lower back or hips sag.\n• Keep your neck neutral by gazing a few inches ahead of your hands.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Pushups-1.png/800px-Pushups-1.png"
+        "tips": "• Don't let lower back or hips sag.\n• Keep neck neutral by gazing a few inches ahead of hands.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg"
     },
     "Elevated push ups": {
         "title": "Elevated / Incline Push-Ups",
         "category": "Calisthenics / Chest",
         "muscles": "Lower Pectoralis, Anterior Deltoids, Triceps",
         "form": (
-            "1. Place hands on an elevated surface (bench, bar, or step) shoulder-width apart.\n"
-            "2. Step feet back so body forms a straight incline plank.\n"
-            "3. Lower your chest toward the edge of the elevated surface.\n"
-            "4. Press through your palms to return to starting position."
+            "1. Place hands on elevated surface (bench or step) shoulder-width apart.\n"
+            "2. Step feet back so body forms straight incline plank.\n"
+            "3. Lower chest toward edge of elevated surface.\n"
+            "4. Press through palms to return to starting position."
         ),
-        "tips": "• Great progression for building chest pushing strength.\n• Keep your core tight and elbows tucked at 45 degrees.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Pushups-1.png/800px-Pushups-1.png"
+        "tips": "• Great progression for building chest pushing strength.\n• Keep core tight and elbows tucked at 45 degrees.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Push-Up/0.jpg"
     },
     "Inclined push ups": {
         "title": "Incline / Decline Push-Ups",
         "category": "Calisthenics / Upper Body",
         "muscles": "Pectoralis Major, Clavicular Head, Triceps, Deltoids",
         "form": (
-            "1. Place feet on a bench or elevated platform and hands on the floor (Decline Push-Up for upper chest).\n"
-            "2. Or hands elevated on a bench (Incline Push-Up for beginners).\n"
-            "3. Lower chest with control until nearly touching floor/surface.\n"
-            "4. Press forcefully back to starting lockout."
+            "1. Place feet on bench or elevated platform and hands on floor.\n"
+            "2. Lower chest with control until nearly touching floor.\n"
+            "3. Press forcefully back to starting lockout."
         ),
-        "tips": "• Maintain strict straight-line body tension from heels to head.\n• Avoid letting hips drop or piking in the air.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Pushups-1.png/800px-Pushups-1.png"
+        "tips": "• Maintain strict straight-line body tension from heels to head.\n• Avoid letting hips drop or piking in air.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Push-Up/0.jpg"
     },
     "Hindu push ups": {
         "title": "Hindu Push-Ups (Dand)",
         "category": "Calisthenics / Full Body Push",
-        "muscles": "Shoulders, Chest, Triceps, Hamstrings, Lower Back Flexibility",
+        "muscles": "Shoulders, Chest, Triceps, Lower Back Flexibility",
         "form": (
-            "1. Start in a downward dog pose with hips high in the air and feet spread wide.\n"
-            "2. Bend elbows and swoop your chest down toward the floor between your hands.\n"
-            "3. Glide forward and arch your torso upward into an upward dog pose (chest up, hips low).\n"
+            "1. Start in downward dog pose with hips high in air.\n"
+            "2. Bend elbows and swoop chest down toward floor between hands.\n"
+            "3. Glide forward and arch torso upward into upward dog pose.\n"
             "4. Push hips back up and return smoothly to starting downward dog."
         ),
-        "tips": "• Perform the motion in one fluid, continuous scoop.\n• Great for shoulder mobility and core conditioning.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Pushups-1.png/800px-Pushups-1.png"
+        "tips": "• Perform motion in one fluid, continuous scoop.\n• Great for shoulder mobility and core conditioning.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Push-Up/0.jpg"
     },
     "Plank": {
         "title": "Forearm Plank",
         "category": "Core / Isometric",
         "muscles": "Transverse Abdominis, Rectus Abdominis, Glutes, Deltoids",
         "form": (
-            "1. Rest on forearms with elbows stacked directly beneath your shoulders.\n"
-            "2. Extend legs behind you with toes planted, forming a straight line from crown of head to heels.\n"
-            "3. Engage your abs as if expecting a punch; squeeze glutes and quads firmly.\n"
+            "1. Rest on forearms with elbows stacked directly beneath shoulders.\n"
+            "2. Extend legs behind with toes planted, forming straight line from head to heels.\n"
+            "3. Engage abs tightly; squeeze glutes and quads firmly.\n"
             "4. Hold position statically while maintaining steady, deep breathing."
         ),
-        "tips": "• Do not let hips sag toward the floor or pike upward.\n• Keep neck neutral by looking at the floor between your forearms.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Plank-exercise.svg/800px-Plank-exercise.svg.png"
+        "tips": "• Do not let hips sag toward floor or pike upward.\n• Keep neck neutral by looking at floor between forearms.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg"
     },
     "Bodyweight lunges": {
         "title": "Bodyweight Walking / Forward Lunges",
@@ -546,129 +545,129 @@ EXERCISE_GUIDES = {
         "muscles": "Quadriceps, Gluteus Maximus, Hamstrings, Core Balance",
         "form": (
             "1. Stand tall with feet hip-width apart and hands on hips.\n"
-            "2. Take a controlled step forward with one leg and lower hips until both knees are bent at ~90 degrees.\n"
-            "3. The back knee should hover 1 inch above the floor without banging down.\n"
-            "4. Drive through front heel to step back to starting position (or step forward for walking lunges)."
+            "2. Take controlled step forward with one leg and lower hips until both knees bend at ~90 degrees.\n"
+            "3. Back knee hovers 1 inch above floor.\n"
+            "4. Drive through front heel to step back to starting position."
         ),
-        "tips": "• Ensure your front knee stays stacked above ankle, not past toes.\n• Keep torso upright—avoid leaning forward.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Squats-1.svg/800px-Squats-1.svg.png"
+        "tips": "• Ensure front knee stays stacked above ankle, not past toes.\n• Keep torso upright—avoid leaning forward.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Walking_Lunge/0.jpg"
     },
     "Chair assisted dips": {
         "title": "Bench / Chair Dips",
         "category": "Calisthenics / Triceps",
         "muscles": "Triceps Brachii, Anterior Deltoids, Lower Chest",
         "form": (
-            "1. Sit on edge of a sturdy chair or bench, hands gripping the edge right next to your hips.\n"
-            "2. Slide hips forward off the chair, legs extended forward with knees slightly bent or straight.\n"
-            "3. Inhale and lower hips by bending elbows until they reach a 90-degree angle.\n"
+            "1. Sit on edge of sturdy chair or bench, hands gripping edge right next to hips.\n"
+            "2. Slide hips forward off chair, legs extended forward.\n"
+            "3. Inhale and lower hips by bending elbows until they reach 90-degree angle.\n"
             "4. Exhale and press through palms to straighten arms back to top position."
         ),
-        "tips": "• Keep your back close to the chair/bench throughout to prevent shoulder strain.\n• Don't dip below 90 degrees at the elbows.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Triceps-dip-1.png/800px-Triceps-dip-1.png"
+        "tips": "• Keep back close to chair/bench throughout to prevent shoulder strain.\n• Don't dip below 90 degrees at elbows.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Dips/0.jpg"
     },
     "Pull ups": {
         "title": "Overhand Pull-Ups",
         "category": "Calisthenics / Upper Body Pull",
         "muscles": "Latissimus Dorsi, Biceps, Upper Back, Forearms, Core",
         "form": (
-            "1. Hang from a pull-up bar with an overhand grip (palms facing away), slightly wider than shoulder-width.\n"
-            "2. Start from a dead hang; depress and retract shoulder blades (active hang).\n"
-            "3. Pull your chest toward the bar by driving your elbows down to your ribs until chin clears the bar.\n"
-            "4. Pause briefly, then lower yourself with complete control back to a full hang."
+            "1. Hang from pull-up bar with overhand grip slightly wider than shoulder-width.\n"
+            "2. Start from dead hang; depress and retract shoulder blades.\n"
+            "3. Pull chest toward bar by driving elbows down to ribs until chin clears bar.\n"
+            "4. Pause briefly, then lower yourself with complete control back to full hang."
         ),
-        "tips": "• Do not swing, kick, or use kipping momentum.\n• Focus on driving elbows down and back rather than curling with wrists.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Pull-up-1.png/800px-Pull-up-1.png"
+        "tips": "• Do not swing, kick, or use kipping momentum.\n• Focus on driving elbows down and back.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
     },
     "Chin ups": {
         "title": "Underhand Chin-Ups",
         "category": "Calisthenics / Arms & Back",
         "muscles": "Biceps Brachii, Latissimus Dorsi, Teres Major, Core",
         "form": (
-            "1. Hang from the bar with an underhand grip (palms facing you), shoulder-width apart.\n"
-            "2. Engage back and biceps, pulling yourself upward until chin is over the bar.\n"
-            "3. Keep elbows close to your body and chest open.\n"
-            "4. Lower smoothly all the way down to a full extension dead hang."
+            "1. Hang from bar with underhand grip (palms facing you), shoulder-width apart.\n"
+            "2. Engage back and biceps, pulling upward until chin is over bar.\n"
+            "3. Keep elbows close to body and chest open.\n"
+            "4. Lower smoothly all the way down to full extension dead hang."
         ),
-        "tips": "• Squeeze your biceps hard at the top of every rep.\n• Avoid rounding shoulders forward at the top.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Pull-up-1.png/800px-Pull-up-1.png"
+        "tips": "• Squeeze biceps hard at top of every rep.\n• Avoid rounding shoulders forward at top.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Chin-Up/0.jpg"
     },
     "Twist crunches": {
         "title": "Twist / Bicycle Crunches",
         "category": "Core / Obliques",
         "muscles": "Internal & External Obliques, Rectus Abdominis",
         "form": (
-            "1. Lie on your back with hands behind your head and knees bent in tabletop position.\n"
-            "2. Lift shoulder blades and twist your right elbow across to touch your left knee while extending right leg straight.\n"
+            "1. Lie on back with hands behind head and knees bent in tabletop position.\n"
+            "2. Lift shoulder blades and twist right elbow across to touch left knee while extending right leg straight.\n"
             "3. Switch sides smoothly, bringing left elbow to right knee while extending left leg.\n"
-            "4. Keep the motion controlled and continuous like pedaling."
+            "4. Keep motion controlled and continuous like pedaling."
         ),
-        "tips": "• Rotate through your ribcage and obliques, not just pulling your elbow.\n• Keep lower back firmly anchored to the floor.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Crunch-1.svg/800px-Crunch-1.svg.png"
+        "tips": "• Rotate through ribcage and obliques, not just pulling elbow.\n• Keep lower back firmly anchored to floor.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cross-Body_Crunch/0.jpg"
     },
     "Jumping": {
         "title": "Jumping Jacks / Vertical Jumps",
         "category": "Cardio / Conditioning",
         "muscles": "Calves, Quads, Deltoids, Cardiovascular System",
         "form": (
-            "1. Stand with feet together and arms at your sides.\n"
+            "1. Stand with feet together and arms at sides.\n"
             "2. Jump lightly, spreading feet beyond shoulder-width while sweeping arms overhead.\n"
             "3. Land softly on balls of feet and immediately jump back to starting stance.\n"
             "4. Keep a brisk, steady rhythm."
         ),
         "tips": "• Keep knees soft on every landing to absorb impact safely.\n• Breathe rhythmically throughout.",
-        "image_url": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80"
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rope_Jumping/0.jpg"
     },
     "Frog stand with parallettes": {
         "title": "Frog Stand / Crow Pose on Parallettes",
         "category": "Calisthenics / Skill & Balance",
         "muscles": "Wrists, Forearms, Shoulders, Core Balance",
         "form": (
-            "1. Place parallettes on the floor shoulder-width apart and grip them firmly.\n"
-            "2. Squat down and place inner knees resting against the outside of your triceps/elbows.\n"
-            "3. Lean forward slowly, shifting your center of gravity until your feet gently lift off the floor.\n"
-            "4. Balance your entire bodyweight on your hands, engaging your core and shoulders."
+            "1. Place parallettes on floor shoulder-width apart and grip firmly.\n"
+            "2. Squat down and place inner knees resting against outside of triceps/elbows.\n"
+            "3. Lean forward slowly until feet gently lift off floor.\n"
+            "4. Balance bodyweight on hands, engaging core and shoulders."
         ),
-        "tips": "• Look slightly forward, not straight down, to prevent tipping over.\n• Grip parallettes tightly and push the ground away.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/L-sit.svg/800px-L-sit.svg.png"
+        "tips": "• Look slightly forward, not straight down, to prevent tipping over.\n• Grip parallettes tightly and push ground away.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg"
     },
     "Tuck front lever hold": {
         "title": "Tuck Front Lever Hold",
         "category": "Calisthenics / Advanced Pull",
         "muscles": "Latissimus Dorsi, Rhomboids, Rear Delts, Abdominals",
         "form": (
-            "1. Hang from a pull-up bar with an overhand grip.\n"
-            "2. Retract scapulae, lock arms straight, and pull your torso up into a horizontal plane.\n"
-            "3. Pull your knees tightly into your chest to shorten the lever arm.\n"
-            "4. Hold your torso completely parallel to the ground for target time."
+            "1. Hang from pull-up bar with overhand grip.\n"
+            "2. Retract scapulae, lock arms straight, and pull torso up into horizontal plane.\n"
+            "3. Pull knees tightly into chest to shorten lever arm.\n"
+            "4. Hold torso completely parallel to ground for target time."
         ),
-        "tips": "• Keep arms 100% straight; do not bend at the elbows.\n• Drive your hands down against the bar like a straight-arm pulldown.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Front-lever.svg/800px-Front-lever.svg.png"
+        "tips": "• Keep arms 100% straight; do not bend at elbows.\n• Drive hands down against bar like a straight-arm pulldown.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
     },
     "advance tuck front lever hold": {
         "title": "Advanced Tuck Front Lever Hold",
         "category": "Calisthenics / Advanced Pull",
         "muscles": "Latissimus Dorsi, Core, Rear Delts, Scapular Retractors",
         "form": (
-            "1. From a straight-arm hang on the bar, pull your torso into horizontal alignment with the floor.\n"
-            "2. Move your knees away from your chest until thighs are at a 90-degree angle with your torso.\n"
-            "3. Keep your back flat and arms locked out straight.\n"
-            "4. Hold the isometric position with maximum lat tension."
+            "1. From straight-arm hang on bar, pull torso into horizontal alignment with floor.\n"
+            "2. Move knees away from chest until thighs are at 90-degree angle with torso.\n"
+            "3. Keep back flat and arms locked out straight.\n"
+            "4. Hold isometric position with maximum lat tension."
         ),
-        "tips": "• Keep your hips in line with your shoulders—don't let hips sag.\n• Squeeze glutes and keep core locked tight.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Front-lever.svg/800px-Front-lever.svg.png"
+        "tips": "• Keep hips in line with shoulders—don't let hips sag.\n• Squeeze glutes and keep core locked tight.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
     },
     "Negative front lever raises": {
         "title": "Negative Front Lever Raises (Eccentrics)",
         "category": "Calisthenics / Advanced Pull",
         "muscles": "Latissimus Dorsi, Rear Deltoids, Core, Grip",
         "form": (
-            "1. Invert your body on the pull-up bar so your feet point straight up toward the ceiling.\n"
-            "2. Lock your arms straight and engage your back.\n"
-            "3. Slowly lower your entire straight body down in a horizontal line toward the floor (3-5 seconds).\n"
-            "4. Resist gravity all the way through parallel before lowering to a dead hang."
+            "1. Invert body on pull-up bar so feet point straight up toward ceiling.\n"
+            "2. Lock arms straight and engage back.\n"
+            "3. Slowly lower entire straight body down in horizontal line toward floor (3-5 seconds).\n"
+            "4. Resist gravity all the way through parallel before lowering to dead hang."
         ),
-        "tips": "• Make the eccentric lowering as slow and controlled as possible.\n• Keep your body in a rigid line without arching or piking.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Front-lever.svg/800px-Front-lever.svg.png"
+        "tips": "• Make eccentric lowering as slow and controlled as possible.\n• Keep body in rigid line without arching or piking.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
     },
     "L-sit": {
         "title": "L-Sit Hold (Parallettes / Floor)",
@@ -676,12 +675,12 @@ EXERCISE_GUIDES = {
         "muscles": "Rectus Abdominis, Hip Flexors, Triceps, Anterior Deltoids",
         "form": (
             "1. Sit on floor or between parallettes with hands pressing firmly beside hips.\n"
-            "2. Depress your shoulders (push down into floor/bars to create neck space).\n"
-            "3. Lift your hips and extend your legs straight out in front, parallel to the ground.\n"
-            "4. Point toes, squeeze quads, and hold the 90-degree 'L' shape."
+            "2. Depress shoulders (push down into floor/bars to create neck space).\n"
+            "3. Lift hips and extend legs straight out in front, parallel to ground.\n"
+            "4. Point toes, squeeze quads, and hold 90-degree 'L' shape."
         ),
-        "tips": "• Don't let your shoulders shrug up to your ears.\n• If full L-sit is difficult, start with one leg extended or bent-knee tuck.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/L-sit.svg/800px-L-sit.svg.png"
+        "tips": "• Don't let shoulders shrug up to ears.\n• If full L-sit is difficult, start with one leg extended or bent-knee tuck.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Dips/0.jpg"
     }
 }
 
@@ -953,7 +952,7 @@ class ActiveWorkoutView(nextcord.ui.View):
         self.current_exercise = selected_ex
         self.build_components()
         guide_embed = self.create_exercise_guide_embed(selected_ex)
-        await interaction.response.edit_message(content=self.disclaimer_text, embed=guide_embed, view=self)
+        await interaction.response.edit_message(content=self.disclaimer_text, embed=guide_embed, view=self, attachments=[])
 
     async def back_overview_callback(self, interaction: nextcord.Interaction):
         self.current_exercise = None
