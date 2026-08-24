@@ -226,7 +226,7 @@ EXERCISE_GUIDES = {
             "3. **Reverse Circles:** Reverse rotation direction to warm up shoulder joints and rotator cuff muscles."
         ),
         "tips": "• Move smoothly without jerking your neck.\n• Keep shoulders relaxed and down away from your ears.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Arm_Circles/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3214-RtyAsy1.gif"
     },
     "Dumbbell bicep curls": {
         "title": "Dumbbell Bicep Curls",
@@ -238,8 +238,8 @@ EXERCISE_GUIDES = {
             "3. Exhale and curl the weights up towards shoulders by contracting biceps.\n"
             "4. Squeeze biceps at peak for 1 second, then lower with control (2-3 seconds)."
         ),
-        "tips": "• Do not swing your body or use momentum from your lower back.\n• Keep wrists straight and firm throughout.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bicep_Curl/0.jpg"
+        "tips": "• Do not swing your body or use momentum from your lower back.\n• Keep wrists straight and supinating (palms facing up) at the top.",
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0294-NbVPDMW.gif"
     },
     "Hammer curls": {
         "title": "Dumbbell Hammer Curls",
@@ -251,8 +251,8 @@ EXERCISE_GUIDES = {
             "3. Lift until top of dumbbells are near shoulder height.\n"
             "4. Pause and squeeze forearms and biceps, then lower with strict control."
         ),
-        "tips": "• Keep elbows pinned to your ribs; do not let them drift forward.\n• Maintain a neutral wrist angle without bending wrists inward.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hammer_Curls/0.jpg"
+        "tips": "• Keep elbows pinned to your ribs; do not let them drift forward.\n• Maintain a neutral wrist angle (thumbs pointing up) throughout.",
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0313-slDvUAU.gif"
     },
     "Overhead Triceps extension": {
         "title": "Overhead Triceps Extension",
@@ -265,7 +265,7 @@ EXERCISE_GUIDES = {
             "4. Exhale and push weight back up by extending triceps until arms are fully locked out."
         ),
         "tips": "• Avoid flaring elbows out to sides.\n• Brace core so you don't over-arch lower back.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Dumbbell_Triceps_Extension/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0430-PdmaD0N.gif"
     },
     "Preacher curls": {
         "title": "Preacher Curls",
@@ -278,7 +278,7 @@ EXERCISE_GUIDES = {
             "4. Squeeze biceps at peak, then lower with control until arms are almost fully extended."
         ),
         "tips": "• Do not lift torso or armpits off pad.\n• Control the eccentric (lowering) phase smoothly to protect elbows.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Preacher_Curl/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0372-jivWf8n.gif"
     },
     "Overhead press": {
         "title": "Overhead Press (Shoulder Press)",
@@ -291,7 +291,7 @@ EXERCISE_GUIDES = {
             "4. Lower weight under control back to shoulder height."
         ),
         "tips": "• Avoid leaning backward or hyperextending lumbar spine.\n• Keep head neutral and push weight vertically in a straight path.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0426-A6wtbuL.gif"
     },
     "Crunches": {
         "title": "Abdominal Crunches",
@@ -304,7 +304,7 @@ EXERCISE_GUIDES = {
             "4. Squeeze core hard at top for 1 second, then slowly lower back down."
         ),
         "tips": "• Do NOT pull on neck or tuck chin into chest.\n• Keep lower back pressed into floor.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Crunches/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0267-kjJ3VoQ.gif"
     },
     "Crunches / Ab crunch machine": {
         "title": "Crunches / Ab Crunch Machine",
@@ -317,7 +317,7 @@ EXERCISE_GUIDES = {
             "4. Pause for peak contraction, then slowly return without letting weight stack slam."
         ),
         "tips": "• Focus on curling ribcage toward pelvis, not pushing with arms.\n• Keep breathing rhythmic—exhale as you crunch.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Ab_Crunch_Machine/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/1452-Wgaz7pm.gif"
     },
     "Seated Cable row": {
         "title": "Seated Cable Row",
@@ -330,7 +330,7 @@ EXERCISE_GUIDES = {
             "4. Hold for 1 second, then slowly extend arms back to starting position."
         ),
         "tips": "• Avoid excessive rocking or swinging back and forth.\n• Keep chest proud and spine neutral at all times.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0861-fUBheHs.gif"
     },
     "Cable lats pulldown": {
         "title": "Cable Lat Pulldown",
@@ -343,7 +343,7 @@ EXERCISE_GUIDES = {
             "4. Squeeze lats at bottom, then slowly return bar under control."
         ),
         "tips": "• Pull with back muscles and elbows, not just forearms.\n• Never pull bar behind neck to protect cervical spine.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0150-eYnzaCm.gif"
     },
     "Pec dec": {
         "title": "Pec Dec (Chest Fly Machine)",
@@ -356,7 +356,7 @@ EXERCISE_GUIDES = {
             "4. Squeeze chest firmly at center for 1 second, then slowly open arms back to starting stretch."
         ),
         "tips": "• Maintain a soft bend in elbows; don't lock or bend them excessively.\n• Don't let shoulders roll forward at peak squeeze.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Butterfly/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0596-v3xmPAR.gif"
     },
     "Bench press": {
         "title": "Barbell / Dumbbell Bench Press",
@@ -369,7 +369,7 @@ EXERCISE_GUIDES = {
             "4. Touch chest lightly, then press forcefully back up to lockout above chest."
         ),
         "tips": "• Retract shoulder blades and keep butt glued to bench.\n• Avoid flaring elbows straight out at 90 degrees.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0025-EIeI8Vf.gif"
     },
     "Bodyweight squats": {
         "title": "Bodyweight Squats",
@@ -382,7 +382,7 @@ EXERCISE_GUIDES = {
             "4. Drive through heels to return to standing, squeezing glutes at top."
         ),
         "tips": "• Keep knees tracking in line with toes—don't let them cave inward.\n• Keep heels grounded throughout entire movement.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0750-Gu2rNJd.gif"
     },
     "Weighted squats": {
         "title": "Weighted Squats (Barbell / Dumbbell)",
@@ -395,7 +395,7 @@ EXERCISE_GUIDES = {
             "4. Push floor away through heels to stand up powerfully."
         ),
         "tips": "• Maintain neutral spine; do not round lower back.\n• Take a deep breath into belly and brace before descending.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Squat/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0043-qXTaZnJ.gif"
     },
     "Leg press": {
         "title": "Leg Press",
@@ -408,7 +408,7 @@ EXERCISE_GUIDES = {
             "4. Press back up through heels to full extension (do NOT lock knees)."
         ),
         "tips": "• Never fully lock out knees at top of press.\n• Ensure lower back and glutes remain pressed flat against seat.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0739-10Z2DXU.gif"
     },
     "Incline leg press": {
         "title": "45° Incline Leg Press",
@@ -421,7 +421,7 @@ EXERCISE_GUIDES = {
             "4. Exhale and drive through heels to press platform back up."
         ),
         "tips": "• Stop descending if pelvis or lower back rolls off pad.\n• Keep knees aligned with feet.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0739-10Z2DXU.gif"
     },
     "Leg extension": {
         "title": "Seated Leg Extension",
@@ -434,7 +434,7 @@ EXERCISE_GUIDES = {
             "4. Pause for 1 second, then lower weight slowly back down."
         ),
         "tips": "• Do not use jerky momentum or swing hips off seat.\n• Control weight all the way down for maximum hypertrophy.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0585-my33uHU.gif"
     },
     "Seated leg curl": {
         "title": "Seated Leg Curl",
@@ -447,7 +447,7 @@ EXERCISE_GUIDES = {
             "4. Squeeze hamstrings tight at peak flexion, then return slowly to starting position."
         ),
         "tips": "• Keep toes pointed straight ahead or slightly flexed.\n• Avoid arching lower back during contraction.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Leg_Curl/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0599-Zg3XY7P.gif"
     },
     "Treadmill": {
         "title": "Treadmill Cardio / Jogging",
@@ -460,7 +460,7 @@ EXERCISE_GUIDES = {
             "4. Maintain steady, rhythmic breathing."
         ),
         "tips": "• Avoid gripping handrails while running.\n• Look straight ahead, not down at feet.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Running_Treadmill/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3666-rjiM4L3.gif"
     },
     "Running": {
         "title": "Outdoor / Track Running",
@@ -473,7 +473,7 @@ EXERCISE_GUIDES = {
             "4. Keep hands relaxed and shoulders away from ears."
         ),
         "tips": "• Don't overstride (landing too far ahead of hips).\n• Pace yourself according to session duration.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Running_Treadmill/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0685-oLrKqDH.gif"
     },
     "Push Ups": {
         "title": "Standard Push-Ups",
@@ -486,7 +486,7 @@ EXERCISE_GUIDES = {
             "4. Push through palms to lock out arms at top."
         ),
         "tips": "• Don't let lower back or hips sag.\n• Keep neck neutral by gazing a few inches ahead of hands.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0662-I4hDWkc.gif"
     },
     "Elevated push ups": {
         "title": "Elevated / Incline Push-Ups",
@@ -499,7 +499,7 @@ EXERCISE_GUIDES = {
             "4. Press through palms to return to starting position."
         ),
         "tips": "• Great progression for building chest pushing strength.\n• Keep core tight and elbows tucked at 45 degrees.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Push-Up/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0493-B1EVP9F.gif"
     },
     "Inclined push ups": {
         "title": "Incline / Decline Push-Ups",
@@ -511,7 +511,7 @@ EXERCISE_GUIDES = {
             "3. Press forcefully back to starting lockout."
         ),
         "tips": "• Maintain strict straight-line body tension from heels to head.\n• Avoid letting hips drop or piking in air.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Push-Up/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0493-B1EVP9F.gif"
     },
     "Hindu push ups": {
         "title": "Hindu Push-Ups (Dand)",
@@ -524,7 +524,7 @@ EXERCISE_GUIDES = {
             "4. Push hips back up and return smoothly to starting downward dog."
         ),
         "tips": "• Perform motion in one fluid, continuous scoop.\n• Great for shoulder mobility and core conditioning.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Push-Up/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3662-XPUDTt7.gif"
     },
     "Plank": {
         "title": "Forearm Plank",
@@ -537,7 +537,7 @@ EXERCISE_GUIDES = {
             "4. Hold position statically while maintaining steady, deep breathing."
         ),
         "tips": "• Do not let hips sag toward floor or pike upward.\n• Keep neck neutral by looking at floor between forearms.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0464-CosupLu.gif"
     },
     "Bodyweight lunges": {
         "title": "Bodyweight Walking / Forward Lunges",
@@ -550,7 +550,7 @@ EXERCISE_GUIDES = {
             "4. Drive through front heel to step back to starting position."
         ),
         "tips": "• Ensure front knee stays stacked above ankle, not past toes.\n• Keep torso upright—avoid leaning forward.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Walking_Lunge/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/1460-IZVHb27.gif"
     },
     "Chair assisted dips": {
         "title": "Bench / Chair Dips",
@@ -558,25 +558,25 @@ EXERCISE_GUIDES = {
         "muscles": "Triceps Brachii, Anterior Deltoids, Lower Chest",
         "form": (
             "1. Sit on edge of sturdy chair or bench, hands gripping edge right next to hips.\n"
-            "2. Slide hips forward off chair, legs extended forward.\n"
-            "3. Inhale and lower hips by bending elbows until they reach 90-degree angle.\n"
-            "4. Exhale and press through palms to straighten arms back to top position."
+            "2. Place feet flat on the floor in front with knees bent at 90 degrees.\n"
+            "3. Lower hips by bending elbows until upper arms are parallel to the floor.\n"
+            "4. Press through palms to straighten arms back to starting position."
         ),
-        "tips": "• Keep back close to chair/bench throughout to prevent shoulder strain.\n• Don't dip below 90 degrees at elbows.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Dips/0.jpg"
+        "tips": "• Keep back close to chair/bench throughout to prevent shoulder strain.\n• Keep feet grounded on the floor (not elevated) for assisted dip variation.",
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0129-RrLske5.gif"
     },
     "Pull ups": {
         "title": "Overhand Pull-Ups",
         "category": "Calisthenics / Upper Body Pull",
         "muscles": "Latissimus Dorsi, Biceps, Upper Back, Forearms, Core",
         "form": (
-            "1. Hang from pull-up bar with overhand grip slightly wider than shoulder-width.\n"
-            "2. Start from dead hang; depress and retract shoulder blades.\n"
-            "3. Pull chest toward bar by driving elbows down to ribs until chin clears bar.\n"
-            "4. Pause briefly, then lower yourself with complete control back to full hang."
+            "1. Hang from pull-up bar with overhand grip slightly wider than shoulder-width, legs completely straight.\n"
+            "2. Start from a dead hang with fully extended arms and active scapulae.\n"
+            "3. Pull chest toward bar in a strict vertical line until chin clears bar.\n"
+            "4. Lower with complete control back down to full straight-arm dead hang."
         ),
-        "tips": "• Do not swing, kick, or use kipping momentum.\n• Focus on driving elbows down and back.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
+        "tips": "• Maintain strict body line with straight legs—no swinging, kipping, or bending knees.\n• Focus on driving elbows down and back to engage lats.",
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0652-lBDjFxJ.gif"
     },
     "Chin ups": {
         "title": "Underhand Chin-Ups",
@@ -589,7 +589,7 @@ EXERCISE_GUIDES = {
             "4. Lower smoothly all the way down to full extension dead hang."
         ),
         "tips": "• Squeeze biceps hard at top of every rep.\n• Avoid rounding shoulders forward at top.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Chin-Up/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/1326-T2mxWqc.gif"
     },
     "Twist crunches": {
         "title": "Twist / Bicycle Crunches",
@@ -602,7 +602,7 @@ EXERCISE_GUIDES = {
             "4. Keep motion controlled and continuous like pedaling."
         ),
         "tips": "• Rotate through ribcage and obliques, not just pulling elbow.\n• Keep lower back firmly anchored to floor.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cross-Body_Crunch/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0262-rbu5UUb.gif"
     },
     "Jumping": {
         "title": "Jumping Jacks / Vertical Jumps",
@@ -615,7 +615,7 @@ EXERCISE_GUIDES = {
             "4. Keep a brisk, steady rhythm."
         ),
         "tips": "• Keep knees soft on every landing to absorb impact safely.\n• Breathe rhythmically throughout.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rope_Jumping/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3224-1g5bPpA.gif"
     },
     "Frog stand with parallettes": {
         "title": "Frog Stand / Crow Pose on Parallettes",
@@ -628,7 +628,7 @@ EXERCISE_GUIDES = {
             "4. Balance bodyweight on hands, engaging core and shoulders."
         ),
         "tips": "• Look slightly forward, not straight down, to prevent tipping over.\n• Grip parallettes tightly and push ground away.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3301-rQhGcin.gif"
     },
     "Tuck front lever hold": {
         "title": "Tuck Front Lever Hold",
@@ -641,7 +641,7 @@ EXERCISE_GUIDES = {
             "4. Hold torso completely parallel to ground for target time."
         ),
         "tips": "• Keep arms 100% straight; do not bend at elbows.\n• Drive hands down against bar like a straight-arm pulldown.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3296-PkCN2lv.gif"
     },
     "advance tuck front lever hold": {
         "title": "Advanced Tuck Front Lever Hold",
@@ -654,7 +654,7 @@ EXERCISE_GUIDES = {
             "4. Hold isometric position with maximum lat tension."
         ),
         "tips": "• Keep hips in line with shoulders—don't let hips sag.\n• Squeeze glutes and keep core locked tight.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3296-PkCN2lv.gif"
     },
     "Negative front lever raises": {
         "title": "Negative Front Lever Raises (Eccentrics)",
@@ -667,7 +667,7 @@ EXERCISE_GUIDES = {
             "4. Resist gravity all the way through parallel before lowering to dead hang."
         ),
         "tips": "• Make eccentric lowering as slow and controlled as possible.\n• Keep body in rigid line without arching or piking.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3296-PkCN2lv.gif"
     },
     "L-sit": {
         "title": "L-Sit Hold (Parallettes / Floor)",
@@ -680,7 +680,7 @@ EXERCISE_GUIDES = {
             "4. Point toes, squeeze quads, and hold 90-degree 'L' shape."
         ),
         "tips": "• Don't let shoulders shrug up to ears.\n• If full L-sit is difficult, start with one leg extended or bent-knee tuck.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Dips/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3419-UpWmA5E.gif"
     }
 }
 
