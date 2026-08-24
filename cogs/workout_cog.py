@@ -221,12 +221,11 @@ EXERCISE_GUIDES = {
         "category": "Warm-up / Mobility",
         "muscles": "Rotator Cuff, Deltoids, Trapezius, Cervical Spine",
         "form": (
-            "1. **Neck Rotations:** Stand upright with shoulders relaxed. Slowly rotate your head in smooth, controlled circles. Reverse direction after 5 reps.\n"
-            "2. **Arm Circles:** Extend arms straight out to sides at shoulder height. Rotate arms in small controlled circles, gradually widening them.\n"
-            "3. **Reverse Circles:** Reverse rotation direction to warm up shoulder joints and rotator cuff muscles."
+            "1. **Arm Rotations:** Stand upright with arms extended to sides. Rotate arms in smooth, controlled circles forward for 10 reps, then reverse backward for 10 reps.\n"
+            "2. **Neck Rotations:** Stand relaxed and slowly roll head in smooth clockwise circles, then reverse counterclockwise."
         ),
-        "tips": "• Move smoothly without jerking your neck.\n• Keep shoulders relaxed and down away from your ears.",
-        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/3214-RtyAsy1.gif"
+        "tips": "• Keep movements smooth and continuous.\n• Keep shoulders relaxed and down away from your ears.",
+        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Arm_Circles/0.jpg"
     },
     "Dumbbell bicep curls": {
         "title": "Dumbbell Bicep Curls",
@@ -273,12 +272,12 @@ EXERCISE_GUIDES = {
         "muscles": "Biceps Brachii (Short Head Isolation)",
         "form": (
             "1. Sit at preacher bench with upper arms resting firmly against slanted pad.\n"
-            "2. Hold EZ-curl bar or dumbbells with an underhand grip, arms extended.\n"
-            "3. Curl weight upward toward chin while keeping armpits snug against top of pad.\n"
+            "2. Hold EZ-curl bar or barbell with both hands using an underhand grip, arms extended.\n"
+            "3. Curl weight upward toward chin with both arms while keeping armpits snug against top of pad.\n"
             "4. Squeeze biceps at peak, then lower with control until arms are almost fully extended."
         ),
-        "tips": "• Do not lift torso or armpits off pad.\n• Control the eccentric (lowering) phase smoothly to protect elbows.",
-        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0372-jivWf8n.gif"
+        "tips": "• Use both hands on the bar to ensure balanced resistance and prevent elbow strain.\n• Do not lift torso or armpits off pad.",
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0070-qOgPVf6.gif"
     },
     "Overhead press": {
         "title": "Overhead Press (Shoulder Press)",
@@ -576,7 +575,7 @@ EXERCISE_GUIDES = {
             "4. Lower with complete control back down to full straight-arm dead hang."
         ),
         "tips": "• Maintain strict body line with straight legs—no swinging, kipping, or bending knees.\n• Focus on driving elbows down and back to engage lats.",
-        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0652-lBDjFxJ.gif"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/1429-Qqi7bko.gif"
     },
     "Chin ups": {
         "title": "Underhand Chin-Ups",
