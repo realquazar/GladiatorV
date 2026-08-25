@@ -225,7 +225,7 @@ EXERCISE_GUIDES = {
             "2. **Neck Rotations:** Stand relaxed and slowly roll head in smooth clockwise circles, then reverse counterclockwise."
         ),
         "tips": "• Keep movements smooth and continuous.\n• Keep shoulders relaxed and down away from your ears.",
-        "image_url": "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Arm_Circles/0.jpg"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0844-VLYXo8S.gif"
     },
     "Dumbbell bicep curls": {
         "title": "Dumbbell Bicep Curls",
@@ -722,7 +722,7 @@ def find_exercise_guide(exercise_raw_name: str):
         "muscles": "Target Muscle Groups",
         "form": "1. Position yourself with proper upright posture and neutral spine.\n2. Perform the movement with controlled tempo and steady breathing.\n3. Complete the prescribed sets and reps with proper form.",
         "tips": "• Maintain strict control on both the lifting and lowering phases.\n• Never sacrifice form for heavier weights.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Squats-1.svg/800px-Squats-1.svg.png"
+        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0844-VLYXo8S.gif"
     }
 
 
