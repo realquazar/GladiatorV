@@ -42,7 +42,7 @@ class HelpCog(commands.Cog):
             color=nextcord.Color.dark_gray()
         )
 
-        embed.set_footer(text=f"Used by {total_user_count:,} warriors across {len(self.bot.guilds):,} servers")
+        embed.set_footer(text=f"Used by {total_user_count:,} warriors")
 
         # Interactive Link Buttons for Dashboard, Top.gg, and Support Server
         view = nextcord.ui.View()
