@@ -7,6 +7,9 @@ class HelpCog(commands.Cog):
 
     @nextcord.slash_command(name="help", description="Learn how Gladiator V works and view all commands.")
     async def help_command(self, interaction: nextcord.Interaction):
+        # Calculate total users across all servers the bot is in
+        total_user_count = sum(guild.member_count for guild in self.bot.guilds if guild.member_count)
+
         embed = nextcord.Embed(
             title="⚔️ GLADIATOR V",
             description=(
@@ -38,6 +41,8 @@ class HelpCog(commands.Cog):
             ),
             color=nextcord.Color.dark_gray()
         )
+
+        embed.set_footer(text=f"Used by {total_user_count:,} warriors across {len(self.bot.guilds):,} servers")
 
         # Interactive Link Buttons for Dashboard, Top.gg, and Support Server
         view = nextcord.ui.View()
