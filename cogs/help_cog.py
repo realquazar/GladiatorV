@@ -63,7 +63,7 @@ class HelpCog(commands.Cog):
         
         support_button = nextcord.ui.Button(
             label="Support Server",
-            url="https://discord.gg/KBtTsr9ub",
+            url="https://discord.gg/SvDdg73AsS",
             style=nextcord.ButtonStyle.link,
             emoji="💬"
         )
