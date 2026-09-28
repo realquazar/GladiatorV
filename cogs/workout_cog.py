@@ -684,30 +684,56 @@ EXERCISE_GUIDES = {
 }
 
 
+def normalize_exercise_str(s: str) -> str:
+    """Normalize exercise string for flexible matching (lowercase, strip parenthetical text, convert punctuation/hyphens to spaces)."""
+    cleaned = re.sub(r"\(.*?\)", "", s).strip().lower()
+    cleaned = re.sub(r"[^\w\s]", " ", cleaned)
+    return " ".join(cleaned.split())
+
+
 def find_exercise_guide(exercise_raw_name: str):
     """
     Smart matcher to find the proper form guide, instructions, and image
-    for any exercise string from routines.
+    for any exercise string from routines, dictionary keys, or autocomplete titles.
     """
-    cleaned = re.sub(r"\(.*?\)", "", exercise_raw_name).strip()
-    
-    # 1. Exact match with cleaned name
+    raw_lower = exercise_raw_name.strip().lower()
+    norm_input = normalize_exercise_str(exercise_raw_name)
+
+    # 1. Exact match against key or title (case-insensitive)
     for key, data in EXERCISE_GUIDES.items():
-        if key.lower() == cleaned.lower():
-            return data
-            
-    # 2. Key contained in cleaned name or vice versa
-    for key, data in EXERCISE_GUIDES.items():
-        if key.lower() in cleaned.lower() or cleaned.lower() in key.lower():
+        title = data.get("title", "")
+        if key.lower() == raw_lower or title.lower() == raw_lower:
             return data
 
-    # 3. Word overlap match
-    cleaned_words = set(cleaned.lower().split())
+    # 2. Normalized exact match against key or title
+    for key, data in EXERCISE_GUIDES.items():
+        title = data.get("title", "")
+        if normalize_exercise_str(key) == norm_input or normalize_exercise_str(title) == norm_input:
+            return data
+
+    # 3. Substring match on normalized text (either direction)
+    for key, data in EXERCISE_GUIDES.items():
+        norm_key = normalize_exercise_str(key)
+        norm_title = normalize_exercise_str(data.get("title", ""))
+        if norm_key and (norm_key in norm_input or norm_input in norm_key):
+            return data
+        if norm_title and (norm_title in norm_input or norm_input in norm_title):
+            return data
+
+    # 4. Word overlap matching
+    stop_words = {"and", "with", "in", "or", "for", "the", "a", "an", "on", "of", "to", "at"}
+    input_words = set(w for w in norm_input.split() if w not in stop_words)
+    
     best_match = None
     best_score = 0
     for key, data in EXERCISE_GUIDES.items():
-        key_words = set(key.lower().split())
-        score = len(cleaned_words.intersection(key_words))
+        key_words = set(w for w in normalize_exercise_str(key).split() if w not in stop_words)
+        title_words = set(w for w in normalize_exercise_str(data.get("title", "")).split() if w not in stop_words)
+        
+        score_key = len(input_words.intersection(key_words))
+        score_title = len(input_words.intersection(title_words))
+        score = max(score_key, score_title)
+
         if score > best_score:
             best_score = score
             best_match = data
@@ -715,14 +741,15 @@ def find_exercise_guide(exercise_raw_name: str):
     if best_match and best_score >= 1:
         return best_match
 
-    # Fallback default
+    # Fallback default (do not default to a specific exercise GIF)
+    cleaned = re.sub(r"\(.*?\)", "", exercise_raw_name).strip()
     return {
         "title": cleaned.title(),
         "category": "General Exercise",
         "muscles": "Target Muscle Groups",
         "form": "1. Position yourself with proper upright posture and neutral spine.\n2. Perform the movement with controlled tempo and steady breathing.\n3. Complete the prescribed sets and reps with proper form.",
         "tips": "• Maintain strict control on both the lifting and lowering phases.\n• Never sacrifice form for heavier weights.",
-        "image_url": "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/0844-VLYXo8S.gif"
+        "image_url": None
     }
 
 
@@ -1183,10 +1210,20 @@ class WorkoutCog(commands.Cog):
     @exercise.on_autocomplete("name")
     async def exercise_autocomplete(self, interaction: nextcord.Interaction, current: str):
         query = current.lower().strip()
+        norm_query = normalize_exercise_str(current)
         choices = []
         for key, data in EXERCISE_GUIDES.items():
             display_title = data.get("title", key)
-            if not query or query in key.lower() or query in display_title.lower():
+            key_lower = key.lower()
+            title_lower = display_title.lower()
+            norm_key = normalize_exercise_str(key)
+            norm_title = normalize_exercise_str(display_title)
+
+            if (not query or 
+                query in key_lower or 
+                query in title_lower or 
+                (norm_query and norm_query in norm_key) or 
+                (norm_query and norm_query in norm_title)):
                 if display_title not in choices:
                     choices.append(display_title)
         await interaction.response.send_autocomplete(choices[:25])
