@@ -19,7 +19,7 @@ intents = nextcord.Intents.default()
 # Set the activity and status to online
 activity = nextcord.Activity(
     type=nextcord.ActivityType.playing,    
-    name="Sometimes you just gotta believe /startworkout"    
+    name="The price of progress is discipline /startworkout"    
 )
 
 bot = commands.Bot(
